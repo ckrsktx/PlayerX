@@ -1,0 +1,242 @@
+[playlist]
+NumberOfEntries=83
+
+File1=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/soundgarden_somms_01_intothevoid.m4a
+Title1=Soundgarden - Into the Void
+Length1=-1
+
+File2=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/pearljam_al314_alive.m4a
+Title2=Pearl Jam - Alive
+Length2=-1
+
+File3=https://d1qg6pckcqcdk0.cloudfront.net/classicrock/genesis_thelambliesdownon_07backinnyc.m4a
+Title3=Genesis - Back in N.Y.C.
+Length3=-1
+
+File4=https://d1qg6pckcqcdk0.cloudfront.net/adult/byrnedavid_americanutopiaonbroadwayoriginalcastrecording_09_onceinalifetime.m4a
+Title4=David Byrne - Once in a Lifetime
+Length4=-1
+
+File5=https://d1qg6pckcqcdk0.cloudfront.net/bored/coldplay_arushofbloodtothe_01politik.m4a
+Title5=Coldplay - Politik
+Length5=-1
+
+File6=https://d1qg6pckcqcdk0.cloudfront.net/indie2/blackangelsthe_deathsong_01_currency.m4a
+Title6=The Black Angels - Currency
+Length6=-1
+
+File7=https://d1qg6pckcqcdk0.cloudfront.net/metal/pantera_vulgardisplayof_03_walk.m4a
+Title7=Pantera - Walk
+Length7=-1
+
+File8=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/metallica_al0354_726-07turnthepageedit.m4a
+Title8=Metallica - Turn the Page (Edit)
+Length8=-1
+
+File9=https://d1qg6pckcqcdk0.cloudfront.net/decades/deftones_aroundthefur_06_bequietanddrivefaraway.m4a
+Title9=Deftones - Be Quiet and Drive (Far Away)
+Length9=-1
+
+File10=https://d1qg6pckcqcdk0.cloudfront.net/classicrock/judaspriest_crgold012_youvegotanotherth.m4a
+Title10=Judas Priest - You've Got Another Thing Comin'
+Length10=-1
+
+File11=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/twiztid_wicked_05_deathnote.m4a
+Title11=Twiztid - Death Note
+Length11=-1
+
+File12=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/creed_al031_1601-04higher.m4a
+Title12=Creed - Higher
+Length12=-1
+
+File13=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/redhotchilipepp_imwithyou_07_theadventuresofraind.m4a
+Title13=Red Hot Chili Peppers - The Adventures of Rain Dance Maggie
+Length13=-1
+
+File14=https://d1qg6pckcqcdk0.cloudfront.net/metal/pantera_vulgardisplayof_10_bydemonsdriven.m4a
+Title14=Pantera - By Demons Be Driven
+Length14=-1
+
+File15=https://d1qg6pckcqcdk0.cloudfront.net/celtic/redhotchillipip_bagrocktothemas_09_100chillipipersrocki.m4a
+Title15=Red Hot Chilli Pipers - 100 Chilli Pipers Rockin'
+Length15=-1
+
+File16=https://d1qg6pckcqcdk0.cloudfront.net/decades/vanzandtsteven_freedomnocompromise_06_cantyoufeelthefire.m4a
+Title16=Steven Van Zandt - Can't You Feel the Fire
+Length16=-1
+
+File17=https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/winwoodsteve_chrgold30_rollwithit.m4a
+Title17=Steve Winwood - Roll With It
+Length17=-1
+
+File18=https://d1qg6pckcqcdk0.cloudfront.net/chr/foofighters_hb200732_03thepretender.m4a
+Title18=Foo Fighters - The Pretender
+Length18=-1
+
+File19=https://d1qg6pckcqcdk0.cloudfront.net/indie2/faithnomore_albumoftheyear_02_stripsearch.m4a
+Title19=Faith No More - Stripsearch
+Length19=-1
+
+File20=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/foofighters_buthereweare_1_rescued.m4a
+Title20=Foo Fighters - Rescued
+Length20=-1
+
+File21=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/smashingpumpkin_adore_02_avaadora.m4a
+Title21=Smashing Pumpkins - Ava Adore
+Length21=-1
+
+File22=https://d1qg6pckcqcdk0.cloudfront.net/classicrock/simpleminds_crgold068_dontyouforgetabou.m4a
+Title22=Simple Minds - Don't You (Forget About Me)
+Length22=-1
+
+File23=https://d1qg6pckcqcdk0.cloudfront.net/chr/incubus_ha200709_02dig.m4a
+Title23=Incubus - Dig
+Length23=-1
+
+File24=https://d1qg6pckcqcdk0.cloudfront.net/chr/foofighters_hd617a_05bestofyou.m4a
+Title24=Foo Fighters - Best of You
+Length24=-1
+
+File25=https://d1qg6pckcqcdk0.cloudfront.net/chrgold/mullinsshawn_ch0318_lullaby.m4a
+Title25=Shawn Mullins - Lullaby
+Length25=-1
+
+File26=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/inthismoment_hb201341_01_whore.m4a
+Title26=In This Moment - Whore
+Length26=-1
+
+File27=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/creed_al0353_723-09whatsthislifefor.m4a
+Title27=Creed - What's This Life For
+Length27=-1
+
+File28=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/pod_al0359_747-17youthofthenation.m4a
+Title28=P.O.D. - Youth of the Nation
+Length28=-1
+
+File29=https://d1qg6pckcqcdk0.cloudfront.net/chr/disturbed_hb200833_02_indestructible.m4a
+Title29=Disturbed - Indestructible
+Length29=-1
+
+File30=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/allthatremains_hb201236_05_standupstandup.m4a
+Title30=All That Remains - Stand Up
+Length30=-1
+
+File31=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/bringmethehoriz_hb201530_05_happysong.m4a
+Title31=Bring Me The Horizon - Happy Song
+Length31=-1
+
+File32=https://d1qg6pckcqcdk0.cloudfront.net/chr/slipknot_hb200827_04_psychosocial.m4a
+Title32=Slipknot - Psychosocial
+Length32=-1
+
+File33=https://d1qg6pckcqcdk0.cloudfront.net/chr/googoodolls_ha200615_07staywithyou.m4a
+Title33=Goo Goo Dolls - Stay With You
+Length33=-1
+
+File34=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/prettyrecklessthe_deathbyrockandrollsingle_1_deathbyrockandroll.m4a
+Title34=The Pretty Reckless - Death By Rock and Roll
+Length34=-1
+
+File35=https://d1qg6pckcqcdk0.cloudfront.net/adult/disturbed_evolution_02_nomore.m4a
+Title35=Disturbed - No More
+Length35=-1
+
+File36=https://d1qg6pckcqcdk0.cloudfront.net/indie/whitestripesthe_elephant_01sevennationarmy.m4a
+Title36=The White Stripes - Seven Nation Army
+Length36=-1
+
+File37=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/riseagainst_hb201718_09_theviolence.m4a
+Title37=Rise Against - The Violence
+Length37=-1
+
+File38=https://d1qg6pckcqcdk0.cloudfront.net/jambands/widespreadpanic_aintlifegrand_04_cantgethigh.m4a
+Title38=Widespread Panic - Can't Get High
+Length38=-1
+
+File39=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/ghost_impera_04_callmelittlesunshineradioedit.m4a
+Title39=Ghost - Call Me Little Sunshine (Radio Edit)
+Length39=-1
+
+File40=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/nirvana_nevermind_12_somethingintheway.m4a
+Title40=Nirvana - Something in the Way
+Length40=-1
+  
+File41=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/flys_al0354_725-02gotyouwhereiwanty.m4a
+Title41=The Flys - Got You (Where I Want You)
+Length41=-1
+
+File42=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/everclear_al314_fatherofmineremix.m4a
+Title42=Everclear - Father of Mine (Remix)
+Length42=-1
+
+File43=https://d1qg6pckcqcdk0.cloudfront.net/numeric/338000/338145.m4a
+Title43=(Unknown Artist) - Track 338145
+Length43=-1
+
+File44=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/kravitzlenny_al0367_9503-18flyaway.m4a
+Title44=Lenny Kravitz - Fly Away
+Length44=-1
+
+File45=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/stabbingwestward_al0345_720-12saveyourself.m4a
+Title45=Stabbing Westward - Save Yourself
+Length45=-1
+
+File46=https://d1qg6pckcqcdk0.cloudfront.net/chr/sixxam_ha200809_01lifeisbeautiful.m4a
+Title46=Sixx:A.M. - Life Is Beautiful
+Length46=-1
+
+File47=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/jet_getborn_02_areyougonnabemygirl.m4a
+Title47=Jet - Are You Gonna Be My Girl
+Length47=-1
+
+File48=https://d1qg6pckcqcdk0.cloudfront.net/classicrock/jethrotull_crgold058_bungleinthejungle.m4a
+Title48=Jethro Tull - Bungle in the Jungle
+Length48=-1
+
+File49=https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/sugarray_chrgold57_everymorning.m4a
+Title49=Sugar Ray - Every Morning
+Length49=-1
+
+File50=https://d1qg6pckcqcdk0.cloudfront.net/chr/seether_hb200833_07_breakdown.m4a
+Title50=Seether - Breakdown
+Length50=-1
+
+File51=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/disturbed_hb201109_02_warrior.m4a
+Title51=Disturbed - Warrior
+Length51=-1
+
+File52=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/godsmack_al0354_726-03whateverclean.m4a
+Title52=Godsmack - Whatever (Clean)
+Length52=-1
+
+File53=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/barenakedladies_al0366_9503-17itsallbeendone.m4a
+Title53=Barenaked Ladies - It's All Been Done
+Length53=-1
+
+File54=https://d1qg6pckcqcdk0.cloudfront.net/metal/clutch_purerockfury_02_purerockfury.m4a
+Title54=Clutch - Pure Rock Fury
+Length54=-1
+
+File55=https://d1qg6pckcqcdk0.cloudfront.net/chr2/neontrees_usedtolikesingle_01_usedtolike.m4a
+Title55=Neon Trees - Used to Like
+Length55=-1
+
+File56=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/linkinpark_meteora20thanniversaryedition_1_lost.m4a
+Title56=Linkin Park - Lost
+Length56=-1
+
+File57=https://d1qg6pckcqcdk0.cloudfront.net/decades/benatarpat_crimesofpassion_2_youbetterrun.m4a
+Title57=Pat Benatar - You Better Run
+Length57=-1
+
+File58=https://d1qg6pckcqcdk0.cloudfront.net/metal/nickelback_alltherightreasons_04_animals.m4a
+Title58=Nickelback - Animals
+Length58=-1
+
+File59=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/u2_al0354_726-15sweetestthingthes.m4a
+Title59=U2 - Sweetest Thing
+Length59=-1
+
+File60=https://d1qg6pckcqcdk0.cloudfront.net/adult/zevonwarren_theenvoy_03_thehulahulaboys.m4a
+Title60=Warren Zevon - The Hula Hula Boys
+Length60=-1
