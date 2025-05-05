@@ -27,6 +27,7 @@ const favoritesList = document.getElementById('favorites-list');
 const searchContainer = document.getElementById('search-container');
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
+const genreSelector = document.getElementById('genre-selector');
 
 // Variáveis de estado
 let playlist = [];
@@ -42,7 +43,6 @@ let searchTimeout = null;
 
 // Inicialização
 function init() {
-    loadPlaylist();
     updateFavoritesList();
     updateFavoriteButton();
     
@@ -62,6 +62,7 @@ function init() {
     audio.addEventListener('ended', handleSongEnd);
     audio.addEventListener('loadedmetadata', updateDuration);
     progressContainer.addEventListener('click', setProgress);
+    genreSelector.addEventListener('change', loadSelectedGenre);
     
     // Eventos de busca
     searchInput.addEventListener('input', handleSearch);
@@ -80,6 +81,82 @@ function init() {
     showDefaultPlaylistCover();
 }
 
+// Carrega a playlist baseada no gênero selecionado
+function loadSelectedGenre() {
+    const genre = genreSelector.value;
+    if (!genre) return;
+    
+    const playlistUrl = `https://raw.githubusercontent.com/ckrsktx/PlayerX/main/${genre}.pls`;
+    fetchPlaylist(playlistUrl);
+}
+
+function fetchPlaylist(url) {
+    fetch(url)
+        .then(res => res.text())
+        .then(data => {
+            playlist = parsePLS(data);
+            originalPlaylistOrder = [...playlist];
+            console.log("Playlist carregada:", playlist);
+            
+            // Habilita controles
+            playBtn.disabled = false;
+            prevBtn.disabled = false;
+            nextBtn.disabled = false;
+            shuffleBtn.disabled = false;
+            favoriteBtn.disabled = false;
+            searchInput.disabled = false;
+            
+            // Carrega a primeira música
+            if (playlist.length > 0) {
+                loadSong(0);
+            }
+        })
+        .catch(err => {
+            console.error("Erro ao carregar playlist:", err);
+            initMessage.textContent = "Erro ao carregar a playlist. Tente novamente.";
+        });
+}
+
+// Parse do arquivo PLS
+function parsePLS(data) {
+    const lines = data.split('\n');
+    const playlist = [];
+    let currentEntry = {};
+
+    lines.forEach(line => {
+        if (line.startsWith('File')) {
+            currentEntry.file = line.split('=')[1].trim();
+        } else if (line.startsWith('Title')) {
+            currentEntry.title = line.split('=')[1].trim();
+            
+            // Separa artista e título se estiver no formato "Artista - Título"
+            const artistTitleSplit = currentEntry.title.split(' - ');
+            if (artistTitleSplit.length === 2) {
+                currentEntry.artist = artistTitleSplit[0];
+                currentEntry.title = artistTitleSplit[1];
+            } else {
+                currentEntry.artist = 'Artista Desconhecido';
+            }
+            
+            // Adiciona à playlist se tiver os dados necessários
+            if (currentEntry.file && currentEntry.title) {
+                playlist.push({
+                    file: currentEntry.file,
+                    title: currentEntry.title,
+                    artist: currentEntry.artist,
+                    length: currentEntry.length || 0,
+                    cover: ''
+                });
+                currentEntry = {};
+            }
+        } else if (line.startsWith('Length')) {
+            currentEntry.length = line.split('=')[1].trim();
+        }
+    });
+
+    return playlist;
+}
+
 // Mostra capa padrão da playlist
 function showDefaultPlaylistCover() {
     defaultPlaylistCover.style.display = 'block';
@@ -87,65 +164,9 @@ function showDefaultPlaylistCover() {
     coverImg.style.display = 'none';
 }
 
-// Carrega a playlist
-function loadPlaylist() {
-    fetch('https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/Christian.pls')
-        .then(res => res.text())
-        .then(data => {
-            playlist = parsePLS(data);
-            originalPlaylistOrder = [...playlist];
-            console.log("Playlist carregada:", playlist);
-        })
-        .catch(err => console.error("Erro ao carregar playlist:", err));
-}
-
-// Parse do arquivo PLS
-function parsePLS(data) {
-    const lines = data.split('\n');
-    const playlist = [];
-    let fileEntries = [];
-    let titleEntries = [];
-    let lengthEntries = [];
-
-    lines.forEach(line => {
-        if (line.startsWith('File')) {
-            const match = line.match(/File(\d+)=(.*)/);
-            if (match) fileEntries[parseInt(match[1])] = match[2];
-        } else if (line.startsWith('Title')) {
-            const match = line.match(/Title(\d+)=(.*)/);
-            if (match) titleEntries[parseInt(match[1])] = match[2];
-        } else if (line.startsWith('Length')) {
-            const match = line.match(/Length(\d+)=(.*)/);
-            if (match) lengthEntries[parseInt(match[1])] = match[2];
-        }
-    });
-
-    for (let i = 1; i < fileEntries.length; i++) {
-        if (fileEntries[i]) {
-            let artist = '';
-            let title = titleEntries[i] || '';
-            const artistTitleSplit = title.split(' - ');
-            if (artistTitleSplit.length === 2) {
-                artist = artistTitleSplit[0];
-                title = artistTitleSplit[1];
-            }
-
-            playlist.push({
-                file: fileEntries[i],
-                title: title || `Música ${i}`,
-                artist: artist || 'Artista Desconhecido',
-                length: lengthEntries[i] || 0,
-                cover: ''
-            });
-        }
-    }
-
-    return playlist;
-}
-
 // Carrega a música atual
 function loadSong(index, fromFavorites = false) {
-    if (playlist.length === 0) return;
+    if (playlist.length === 0 || index < 0 || index >= playlist.length) return;
     
     const song = playlist[index];
     currentSongIndex = index;
