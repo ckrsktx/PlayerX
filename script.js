@@ -1,125 +1,195 @@
-// Configuração básica do player
-const audio = new Audio();
-let currentPlaylist = [];
-let currentSongIndex = 0;
-let isPlaying = false;
-
-// Elementos da interface
-const playBtn = document.getElementById('play-btn');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const songTitle = document.getElementById('song-title');
-const songArtist = document.getElementById('song-artist');
-const genreSelector = document.getElementById('genre-selector');
-
-// Playlists reais do seu repositório
-const PLAYLISTS = {
-  Rock: 'https://raw.githubusercontent.com/ckrsktx/PlayerX/main/Rock.pls',
-  Christian: 'https://raw.githubusercontent.com/ckrsktx/PlayerX/main/Christian.pls'
-};
-
-// Carrega uma playlist
-async function loadPlaylist(genre) {
-  try {
-    const response = await fetch(PLAYLISTS[genre]);
-    const data = await response.text();
-    currentPlaylist = parsePLS(data);
+document.addEventListener('DOMContentLoaded', function() {
+    const audio = new Audio();
+    let currentTrackIndex = 0;
+    let playlist = [];
+    let isPlaying = false;
     
-    if (currentPlaylist.length > 0) {
-      loadSong(0);
-      enableControls();
-    }
-  } catch (error) {
-    console.error('Erro ao carregar playlist:', error);
-    alert('Erro ao carregar a playlist. Verifique o console para detalhes.');
-  }
-}
-
-// Função para analisar o arquivo PLS (atualizada)
-function parsePLS(data) {
-  const lines = data.split('\n');
-  const songs = [];
-  let currentSong = {};
-
-  lines.forEach(line => {
-    if (line.startsWith('File')) {
-      currentSong.file = line.split('=')[1]?.trim();
-    } else if (line.startsWith('Title')) {
-      const title = line.split('=')[1]?.trim();
-      const [artist, songTitle] = title.includes(' - ') ? 
-        title.split(' - ') : ['Artista Desconhecido', title];
-      
-      currentSong.title = songTitle || 'Música Desconhecida';
-      currentSong.artist = artist;
-      
-      if (currentSong.file) {
-        songs.push({...currentSong});
-        currentSong = {};
-      }
-    }
-  });
-
-  return songs;
-}
-
-// Carrega uma música específica
-function loadSong(index) {
-  if (!currentPlaylist.length || index < 0 || index >= currentPlaylist.length) return;
-
-  const song = currentPlaylist[index];
-  currentSongIndex = index;
-  
-  audio.src = song.file;
-  songTitle.textContent = song.title;
-  songArtist.textContent = song.artist;
-  
-  if (isPlaying) {
-    audio.play().catch(e => {
-      console.error('Erro ao reproduzir:', e);
-      alert('Erro ao reproduzir a música. Verifique o console.');
+    // Elementos do DOM
+    const playBtn = document.getElementById('play-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+    const volumeControl = document.getElementById('volume');
+    const coverEl = document.getElementById('cover');
+    const musicTitleEl = document.getElementById('music-title');
+    const artistEl = document.getElementById('artist');
+    const playlistEl = document.getElementById('playlist');
+    const playlistSelect = document.getElementById('playlist-select');
+    
+    // Carregar playlist selecionada
+    playlistSelect.addEventListener('change', function() {
+        const playlistUrl = this.value;
+        if (playlistUrl) {
+            loadPlaylist(playlistUrl);
+        }
     });
-  }
-}
-
-// Habilita os controles
-function enableControls() {
-  playBtn.disabled = false;
-  prevBtn.disabled = false;
-  nextBtn.disabled = false;
-}
-
-// Event Listeners
-genreSelector.addEventListener('change', (e) => {
-  if (e.target.value) {
-    loadPlaylist(e.target.value);
-  }
-});
-
-playBtn.addEventListener('click', () => {
-  if (!currentPlaylist.length) return;
-  
-  isPlaying = !isPlaying;
-  playBtn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-  
-  if (isPlaying) {
-    audio.play().catch(e => {
-      console.error('Erro ao reproduzir:', e);
-      alert('Erro ao reproduzir. Verifique se as URLs das músicas são acessíveis.');
+    
+    // Função para carregar playlist
+    async function loadPlaylist(url) {
+        try {
+            // Usando proxy CORS para evitar problemas de mesma origem
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
+            
+            // Parse do conteúdo da playlist .pls
+            const playlistContent = data.contents;
+            const entries = playlistContent.split('\n').filter(line => line.startsWith('File'));
+            
+            playlist = entries.map(entry => {
+                const parts = entry.split('=');
+                const file = parts[1]?.trim();
+                // Extrair título e artista do nome do arquivo (simplificado)
+                const filename = file.split('/').pop().replace(/\.[^/.]+$/, "");
+                const [artist, title] = filename.split(' - ') || ['Artista Desconhecido', filename];
+                
+                return {
+                    file,
+                    title: title || filename,
+                    artist: artist || 'Artista Desconhecido'
+                };
+            });
+            
+            renderPlaylist();
+            if (playlist.length > 0) {
+                loadTrack(0);
+            }
+        } catch (error) {
+            console.error('Erro ao carregar playlist:', error);
+            alert('Erro ao carregar a playlist. Verifique o console para mais detalhes.');
+        }
+    }
+    
+    // Renderizar playlist na UI
+    function renderPlaylist() {
+        playlistEl.innerHTML = '';
+        playlist.forEach((track, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${track.artist} - ${track.title}`;
+            li.addEventListener('click', () => {
+                loadTrack(index);
+                playTrack();
+            });
+            playlistEl.appendChild(li);
+        });
+    }
+    
+    // Carregar faixa específica
+    function loadTrack(index) {
+        if (index < 0 || index >= playlist.length) return;
+        
+        currentTrackIndex = index;
+        const track = playlist[index];
+        
+        audio.src = track.file;
+        musicTitleEl.textContent = track.title;
+        artistEl.textContent = track.artist;
+        
+        // Atualizar capa do álbum (simplificado)
+        coverEl.src = `https://via.placeholder.com/300?text=${encodeURIComponent(track.title)}`;
+        
+        // Atualizar item ativo na playlist
+        const playlistItems = playlistEl.querySelectorAll('li');
+        playlistItems.forEach((item, i) => {
+            item.classList.toggle('playing', i === index);
+        });
+        
+        // Quando os metadados da música são carregados
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+        
+        // Se já estava tocando, continua tocando
+        if (isPlaying) {
+            playTrack();
+        }
+    }
+    
+    // Tocar música
+    function playTrack() {
+        audio.play()
+            .then(() => {
+                isPlaying = true;
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            })
+            .catch(error => {
+                console.error('Erro ao reproduzir:', error);
+                // Tentar tratar erro de autoplay
+                if (error.name === 'NotAllowedError') {
+                    alert('Por favor, clique no botão play para iniciar a reprodução.');
+                }
+            });
+    }
+    
+    // Pausar música
+    function pauseTrack() {
+        audio.pause();
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+    
+    // Próxima faixa
+    function nextTrack() {
+        const nextIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(nextIndex);
+        playTrack();
+    }
+    
+    // Faixa anterior
+    function prevTrack() {
+        const prevIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+        loadTrack(prevIndex);
+        playTrack();
+    }
+    
+    // Formatador de tempo (mm:ss)
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+    
+    // Atualizar barra de progresso
+    function updateProgress() {
+        const { currentTime, duration } = audio;
+        const progressPercent = (currentTime / duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+        currentTimeEl.textContent = formatTime(currentTime);
+    }
+    
+    // Definir progresso da música ao clicar na barra
+    progressBar.parentElement.addEventListener('click', (e) => {
+        const width = e.target.clientWidth;
+        const clickX = e.offsetX;
+        const duration = audio.duration;
+        audio.currentTime = (clickX / width) * duration;
     });
-  } else {
-    audio.pause();
-  }
+    
+    // Event Listeners
+    playBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            pauseTrack();
+        } else {
+            playTrack();
+        }
+    });
+    
+    nextBtn.addEventListener('click', nextTrack);
+    prevBtn.addEventListener('click', prevTrack);
+    
+    volumeControl.addEventListener('input', () => {
+        audio.volume = volumeControl.value;
+    });
+    
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', nextTrack);
+    
+    // Inicializar volume
+    audio.volume = volumeControl.value;
+    
+    // Carregar a primeira playlist por padrão (opcional)
+    // playlistSelect.value = playlistSelect.options[1].value;
+    // loadPlaylist(playlistSelect.value);
 });
-
-prevBtn.addEventListener('click', () => {
-  const newIndex = (currentSongIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-  loadSong(newIndex);
-});
-
-nextBtn.addEventListener('click', () => {
-  const newIndex = (currentSongIndex + 1) % currentPlaylist.length;
-  loadSong(newIndex);
-});
-
-// Verificação inicial
-console.log('PlayerX inicializado');
