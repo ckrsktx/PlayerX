@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PlayerX - Um player de música moderno com suporte para múltiplos gêneros musicais">
+    <title>PlayerX - Modern Music Player</title>
+    <link rel="icon" href="https://ckrsktx.github.io/PlayerX/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://ckrsktx.github.io/PlayerX/styles.css">
+</head>
+<body>
+    <div class="player">
+        <button class="menu-btn" id="menu-btn" aria-label="Abrir menu">
+            <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+        
+        <div class="panel-overlay" id="panel-overlay"></div>
+        
+        <div class="favorites-panel" id="favorites-panel">
+            <h3>Músicas Favoritas</h3>
+            <div id="favorites-list"></div>
+        </div>
+        
+        <div class="cover">
+            <img class="default-playlist-cover" src="https://ckrsktx.github.io/PlayerX/assets/default-cover.jpg" alt="Capa da Playlist" loading="lazy">
+            <div class="default-cover" aria-hidden="true">
+                <i class="fas fa-music"></i>
+            </div>
+            <img id="cover-img" src="" alt="Capa do Álbum" style="display:none;" loading="lazy">
+        </div>
+        
+        <div class="info">
+            <h2 id="song-title">PlayerX</h2>
+            <p id="song-artist">Selecione um gênero e clique em play</p>
+
+            <div class="genre-selector-container">
+                <label for="genre-selector" class="genre-label">Gênero:</label>
+                <select id="genre-selector" class="genre-selector">
+                    <option value="">Selecione um gênero</option>
+                    <option value="Rock">Rock</option>
+                    <option value="Christian">Christian</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="progress-container" id="progress-container" style="display:none;">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="time" id="time-display" style="display:none;">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+        
+        <div class="controls">
+            <button id="prev-btn" disabled aria-label="Música anterior">
+                <i class="fas fa-step-backward" aria-hidden="true"></i>
+            </button>
+            <button id="play-btn" class="play-btn" disabled aria-label="Play/Pause">
+                <i class="fas fa-play" aria-hidden="true"></i>
+            </button>
+            <button id="next-btn" disabled aria-label="Próxima música">
+                <i class="fas fa-step-forward" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <div class="bottom-controls">
+            <button class="shuffle-btn" id="shuffle-btn" disabled aria-label="Ativar/desativar aleatório">
+                <i class="fas fa-random" aria-hidden="true"></i>
+            </button>
+            <button class="favorite-btn" id="favorite-btn" disabled aria-label="Adicionar aos favoritos">
+                <i class="far fa-heart" aria-hidden="true"></i>
+            </button>
+            <button class="volume-btn" id="mute-btn" aria-label="Ativar/desativar mudo">
+                <i class="fas fa-volume-up" aria-hidden="true"></i>
+            </button>
+            <button class="favorites-btn" id="favorites-btn" aria-label="Abrir favoritos">
+                <i class="fas fa-heart" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <div class="search-container" id="search-container">
+            <div class="search-results" id="search-results"></div>
+            <input type="text" class="search-input" id="search-input" placeholder="Buscar música ou artista..." disabled>
+            <div class="search-icon" aria-hidden="true">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        
+        <div class="init-message" id="init-message">
+            Selecione um gênero musical para começar
+        </div>
+    </div>
+
+    <script src="player.js"></script>
+</body>
+</html>
