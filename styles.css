@@ -222,6 +222,36 @@ body {
     margin-bottom: 5px;
 }
 
+.genre-selector-container {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.genre-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.genre-selector {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    width: 100%;
+    max-width: 250px;
+    cursor: pointer;
+}
+
+.genre-selector:focus {
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .progress-container {
     width: 100%;
     height: 5px;
