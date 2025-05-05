@@ -89,7 +89,7 @@ function showDefaultPlaylistCover() {
 
 // Carrega a playlist
 function loadPlaylist() {
-    fetch('https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/Playlist%20test.pls')
+    fetch('https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/Christian.pls')
         .then(res => res.text())
         .then(data => {
             playlist = parsePLS(data);
