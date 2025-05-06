@@ -62,7 +62,7 @@
             padding: 0;
             margin-left: 2px;
             font-family: 'MS Sans Serif', 'Arial', sans-serif;
-            font-size: 8px;
+            font-size: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -173,11 +173,11 @@
             background-color: #c0c0c0;
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff;
-            padding: 5px 10px;
+            padding: 5px 8px;
             cursor: pointer;
             font-family: 'MS Sans Serif', 'Arial', sans-serif;
             font-size: 12px;
-            min-width: 70px;
+            min-width: 60px;
         }
 
         button:active {
@@ -185,12 +185,16 @@
         }
 
         .play-btn {
-            min-width: 90px;
+            min-width: 70px;
         }
 
         .shuffle-btn.active {
             background-color: #000080;
             color: white;
+        }
+
+        .playlist-btn {
+            min-width: 60px;
         }
 
         .file-input-container {
@@ -233,11 +237,11 @@
         }
 
         .file-input-select {
-            min-width: 70px;
+            min-width: 60px;
         }
 
         .cover-btn {
-            min-width: 70px;
+            min-width: 60px;
         }
 
         .status-bar {
@@ -355,7 +359,7 @@
             padding: 0;
             margin-left: 2px;
             font-family: 'MS Sans Serif', 'Arial', sans-serif;
-            font-size: 8px;
+            font-size: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -387,6 +391,79 @@
             text-align: center;
         }
 
+        /* Modal da playlist - versão atualizada */
+        .playlist-modal-window {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 300px;
+            max-height: 60vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playlist-modal-header {
+            flex-shrink: 0;
+        }
+
+        .playlist-modal-body {
+            padding: 0 10px 10px 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .playlist-item {
+            padding: 8px;
+            margin-bottom: 5px;
+            background-color: white;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            cursor: pointer;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item.current {
+            background-color: #000080;
+            color: white;
+        }
+
+        .playlist-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .playlist-item.current:hover {
+            background-color: #000080;
+        }
+
+        /* Barra de rolagem estilo Windows 98 */
+        .playlist-modal-body::-webkit-scrollbar {
+            width: 16px;
+        }
+
+        .playlist-modal-body::-webkit-scrollbar-track {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+
+        .playlist-modal-body::-webkit-scrollbar-thumb {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+
+        .playlist-modal-body::-webkit-scrollbar-button {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            height: 16px;
+        }
+
         /* Responsividade para telas menores */
         @media (max-width: 480px) {
             .window {
@@ -394,17 +471,17 @@
             }
             
             .controls button {
-                min-width: 60px;
+                min-width: 50px;
                 font-size: 11px;
-                padding: 4px 8px;
+                padding: 4px 6px;
             }
             
             .play-btn {
-                min-width: 80px;
+                min-width: 60px;
             }
             
-            .file-input-select, .cover-btn {
-                min-width: 60px;
+            .file-input-select, .cover-btn, .playlist-btn {
+                min-width: 50px;
             }
             
             .song-title {
@@ -449,7 +526,8 @@
                     <button id="prev-btn"><i class="fas fa-backward"></i> Anterior</button>
                     <button id="play-btn" class="play-btn"><i class="fas fa-play"></i> Play</button>
                     <button id="next-btn"><i class="fas fa-forward"></i> Próxima</button>
-                    <button id="shuffle-btn"><i class="fas fa-random"></i> Shuffle</button>
+                    <button id="shuffle-btn" class="shuffle-btn"><i class="fas fa-random"></i> Shuffle</button>
+                    <button id="playlist-btn" class="playlist-btn"><i class="fas fa-list"></i> Lista</button>
                 </div>
                 
                 <div class="volume-control">
@@ -495,6 +573,23 @@
         </div>
     </div>
 
+    <!-- Modal da playlist - versão atualizada -->
+    <div class="modal-overlay" id="playlist-modal-overlay">
+        <div class="playlist-modal-window">
+            <div class="playlist-modal-header">
+                <div class="modal-title-bar">
+                    <div class="modal-title-bar-text">Lista de Músicas</div>
+                    <div class="modal-title-bar-controls">
+                        <button class="modal-close-btn" id="playlist-modal-close-btn">X</button>
+                    </div>
+                </div>
+            </div>
+            <div class="playlist-modal-body" id="playlist-modal-body">
+                <div class="no-playlist">Nenhuma música na playlist</div>
+            </div>
+        </div>
+    </div>
+
     <script>
     // Elementos do DOM
     const audio = new Audio();
@@ -509,6 +604,7 @@
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
     const shuffleBtn = document.getElementById('shuffle-btn');
+    const playlistBtn = document.getElementById('playlist-btn');
     const volumeControl = document.getElementById('volume');
     const fileInput = document.getElementById('file-input');
     const fileInputLabel = document.getElementById('file-input-label');
@@ -519,6 +615,9 @@
     const modalBody = document.getElementById('modal-body');
     const albumCover = document.getElementById('album-cover');
     const noCoverMessage = document.querySelector('.no-cover');
+    const playlistModalOverlay = document.getElementById('playlist-modal-overlay');
+    const playlistModalCloseBtn = document.getElementById('playlist-modal-close-btn');
+    const playlistModalBody = document.getElementById('playlist-modal-body');
 
     // Variáveis de estado
     let playlist = [];
@@ -537,10 +636,12 @@
         nextBtn.addEventListener('click', nextSong);
         prevBtn.addEventListener('click', prevSong);
         shuffleBtn.addEventListener('click', toggleShuffle);
+        playlistBtn.addEventListener('click', showPlaylist);
         volumeControl.addEventListener('input', updateVolume);
         fileInput.addEventListener('change', handleFileSelect);
         coverBtn.addEventListener('click', showAlbumCover);
         modalCloseBtn.addEventListener('click', hideAlbumCover);
+        playlistModalCloseBtn.addEventListener('click', hidePlaylist);
         audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('ended', handleSongEnd);
         audio.addEventListener('loadedmetadata', updateDuration);
@@ -562,6 +663,11 @@
         audio.volume = volumeControl.value;
         updateStatus("Pronto para carregar uma playlist");
         updateTitle();
+        
+        // Correção para iOS - força o carregamento do áudio
+        document.addEventListener('touchstart', function() {
+            // Função vazia apenas para ativar o áudio no iOS
+        }, { once: true });
     }
 
     // Atualiza o título da página com a música atual
@@ -593,6 +699,7 @@
                     currentSongIndex = 0;
                     loadSong(currentSongIndex);
                     updateStatus(`Playlist carregada com ${playlist.length} músicas`);
+                    updatePlaylistModal();
                 } else {
                     updateStatus("Playlist vazia ou inválida");
                 }
@@ -661,8 +768,16 @@
         // Configura áudio
         audio.src = song.file;
         
+        // Força o carregamento no iOS
+        if (isIOS()) {
+            audio.load();
+        }
+        
         // Busca capa do álbum
         fetchAlbumCover(song.artist, song.title);
+        
+        // Atualiza a lista de músicas
+        updatePlaylistModal();
         
         // Se estiver tocando, continua a reprodução
         if (isPlaying) {
@@ -673,6 +788,12 @@
         }
         
         updateTitle();
+    }
+
+    // Verifica se é iOS
+    function isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     }
 
     // Busca capa do álbum via API Last.fm
@@ -719,6 +840,48 @@
         modalOverlay.classList.remove('show');
     }
 
+    // Mostra a lista de músicas no modal
+    function showPlaylist() {
+        if (playlist.length === 0) {
+            updateStatus("Nenhuma playlist carregada");
+            return;
+        }
+        playlistModalOverlay.classList.add('show');
+    }
+
+    // Esconde o modal da playlist
+    function hidePlaylist() {
+        playlistModalOverlay.classList.remove('show');
+    }
+
+    // Atualiza o modal da playlist
+    function updatePlaylistModal() {
+        if (playlist.length === 0) {
+            playlistModalBody.innerHTML = '<div class="no-playlist">Nenhuma música na playlist</div>';
+            return;
+        }
+
+        playlistModalBody.innerHTML = '';
+        playlist.forEach((song, index) => {
+            const item = document.createElement('div');
+            item.className = `playlist-item ${index === currentSongIndex ? 'current' : ''}`;
+            item.textContent = `${index + 1}. ${song.title} - ${song.artist}`;
+            item.addEventListener('click', () => {
+                currentSongIndex = index;
+                loadSong(currentSongIndex);
+                if (!isPlaying) playSong();
+                hidePlaylist();
+            });
+            playlistModalBody.appendChild(item);
+        });
+
+        // Rolagem automática para a música atual
+        const currentItem = playlistModalBody.querySelector('.current');
+        if (currentItem) {
+            currentItem.scrollIntoView({ block: 'nearest' });
+        }
+    }
+
     // Controle de play/pause
     function togglePlay() {
         if (playlist.length === 0) {
@@ -739,12 +902,24 @@
     function playSong() {
         isPlaying = true;
         playBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-        audio.play().catch(e => {
-            console.log("Erro ao reproduzir:", e);
-            updateStatus("Erro ao reproduzir música");
-        });
+        
+        // Correção para iOS - precisa ser disparado por uma ação do usuário
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                console.log("Erro ao reproduzir:", e);
+                updateStatus("Erro ao reproduzir música");
+                // Tenta novamente com um fallback
+                setTimeout(() => {
+                    audio.play().catch(e => console.log("Erro ao reproduzir:", e));
+                }, 100);
+            });
+        }
+        
         updateStatus(`Tocando: ${playlist[currentSongIndex].title}`);
         updateTitle();
+        updatePlaylistModal();
     }
 
     function pauseSong() {
@@ -783,6 +958,8 @@
                 song.artist === playlist[currentSongIndex].artist);
             updateStatus("Modo shuffle desativado");
         }
+        
+        updatePlaylistModal();
     }
 
     // Manipulador de fim de música
