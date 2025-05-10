@@ -1,5 +1,10 @@
 [playlist]
-NumberOfEntries=125
+NumberOfEntries=148
+
+File148=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/limpbizkit_al330_faith.m4a
+Title148=Limp Bizkit - Faith
+Length148=-1
+  
 File1=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/soundgarden_somms_01_intothevoid.m4a
 Title1=Soundgarden - Into the Void
 Length1=-1
@@ -379,3 +384,94 @@ Length124=-1
 File125=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/lynchliam_fakesongs_02_unitedstatesofwhatever.m4a
 Title125=Liam Lynch - United States of Whatever
 Length125=-1
+
+File126=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/aliceinchains_al0341_682-14rooster.m4a
+Title126=Alice in Chains - Rooster
+Length126=-1
+
+File127=https://d1qg6pckcqcdk0.cloudfront.net/metal/livingcolour_vivid_05_openlettertoalandlord.m4a
+Title127=Living Colour - Open Letter to a Landlord
+Length127=-1
+
+File128=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/pearljam_al339_evenflow.m4a
+Title128=Pearl Jam - Even Flow
+Length128=-1
+
+File129=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/nineinchnails_al335_hurtquietversionc.m4a
+Title129=Nine Inch Nails - Hurt (Quiet Version)
+Length129=-1
+
+; Skipped: The Rapture - I Need Your Love (already added)
+
+File130=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/nirvana_al0341_687-08heartshapedbox.m4a
+Title130=Nirvana - Heart-Shaped Box
+Length130=-1
+
+File131=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/godsmack_al036_1611-05awake.m4a
+Title131=Godsmack - Awake
+Length131=-1
+
+File132=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/korn_al032_1603-01fallingawayfromme.m4a
+Title132=Korn - Falling Away from Me
+Length132=-1
+
+File133=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/foofighters_onebyone_01_allmylife.m4a
+Title133=Foo Fighters - All My Life
+Length133=-1
+
+File134=https://d1qg6pckcqcdk0.cloudfront.net/indie/postalserviceth_giveup_02_suchgreatheights.m4a
+Title134=The Postal Service - Such Great Heights
+Length134=-1
+
+File135=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/monstermagnet_al0346_722-02spacelordedit.m4a
+Title135=Monster Magnet - Space Lord (Edit)
+Length135=-1
+
+File136=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/foofighters_al0345_720-05myhero.m4a
+Title136=Foo Fighters - My Hero
+Length136=-1
+
+File137=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/rageagainstthemac_al331_killinginthenamee.m4a
+Title137=Rage Against the Machine - Killing in the Name
+Length137=-1
+
+File138=https://d1qg6pckcqcdk0.cloudfront.net/chr/coldplay_gd1908_001clocksedit.m4a
+Title138=Coldplay - Clocks (Edit)
+Length138=-1
+
+File139=https://d1qg6pckcqcdk0.cloudfront.net/chr/staind_gd1913_004sofarawayalbum.m4a
+Title139=Staind - So Far Away
+Length139=-1
+
+File140=https://d1qg6pckcqcdk0.cloudfront.net/chr/trapt_hd534a_01headstrong.m4a
+Title140=Trapt - Headstrong
+Length140=-1
+
+File141=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/storyoftheyear_pageavenue_02_untilthedayidie.m4a
+Title141=Story of the Year - Until the Day I Die
+Length141=-1
+
+File142=https://d1qg6pckcqcdk0.cloudfront.net/chr/evanescence_gd1909_16bringmetolife.m4a
+Title142=Evanescence - Bring Me to Life
+Length142=-1
+
+File143=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/nickelback_al039_1616-11howyouremindmealb.m4a
+Title143=Nickelback - How You Remind Me
+Length143=-1
+
+File144=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/puddleofmudd_comeclean_06_shehatesme.m4a
+Title144=Puddle of Mudd - She Hates Me
+Length144=-1
+
+File145=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/sevendust_seasons_02_enemy.m4a
+Title145=Sevendust - Enemy
+Length145=-1
+
+File146=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/greenday_al0347_694-05basketcase.m4a
+Title146=Green Day - Basket Case
+Length146=-1
+
+File147=https://d1qg6pckcqcdk0.cloudfront.net/chr/goodcharlotte_gd826_14theanthemgood.m4a
+Title147=Good Charlotte - The Anthem
+Length147=-1
+
