@@ -1,5 +1,5 @@
 [playlist]
-NumberOfEntries=148
+NumberOfEntries=165
 
 File148=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/limpbizkit_al330_faith.m4a
 Title148=Limp Bizkit - Faith
@@ -475,3 +475,70 @@ File147=https://d1qg6pckcqcdk0.cloudfront.net/chr/goodcharlotte_gd826_14theanthe
 Title147=Good Charlotte - The Anthem
 Length147=-1
 
+File149=https://d1qg6pckcqcdk0.cloudfront.net/decades/tool_lateralus_05_schism.m4a
+Title149=Tool - Schism
+Length149=-1
+
+File150=https://d1qg6pckcqcdk0.cloudfront.net/metal/systemofadown_toxicity_14_aerials.m4a
+Title150=System of a Down - Aerials
+Length150=-1
+
+File151=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/staind_al038_1615-08outsidestudiovers.m4a
+Title151=Staind - Outside
+Length151=-1
+
+File152=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/incubus_al0359_748-09nicetoknowyou.m4a
+Title152=Incubus - Nice to Know You
+Length152=-1
+
+File153=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/afroman_al039_1616-17becauseigothighed.m4a
+Title153=Afroman - Because I Got High
+Length153=-1
+
+File154=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/creed_al0359_746-12mysacrifice.m4a
+Title154=Creed - My Sacrifice
+Length154=-1
+
+File155=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/powderfinger_al337_myhappinessradioe.m4a
+Title155=Powderfinger - My Happiness
+Length155=-1
+
+File156=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/staind_al0358_745-09fadealbumversion.m4a
+Title156=Staind - Fade
+Length156=-1
+
+File157=https://d1qg6pckcqcdk0.cloudfront.net/indie2/strokesthe_isthisit_08_hardtoexplain.m4a
+Title157=The Strokes - Hard to Explain
+Length157=-1
+
+File158=https://d1qg6pckcqcdk0.cloudfront.net/currentrock/sevendust_animosity_02_praise.m4a
+Title158=Sevendust - Praise
+Length158=-1
+
+File159=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/davematthewsband_al037_1612-13ididit.m4a
+Title159=Dave Matthews Band - I Did It
+Length159=-1
+
+File160=https://d1qg6pckcqcdk0.cloudfront.net/chrgold/crazytown_ch0338_butterfly.m4a
+Title160=Crazy Town - Butterfly
+Length160=-1
+
+File161=https://d1qg6pckcqcdk0.cloudfront.net/indie/gorillaz_gorillaz_11192000.m4a
+Title161=Gorillaz - Clint Eastwood
+Length161=-1
+
+File162=https://d1qg6pckcqcdk0.cloudfront.net/decades/sevenmarythree_theeconomyofsou_02_wait.m4a
+Title162=Seven Mary Three - Wait
+Length162=-1
+
+File163=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/sum41_al038_1614-13fatlip.m4a
+Title163=Sum 41 - Fat Lip
+Length163=-1
+
+File164=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/blink182_al039_1617-06therockshow.m4a
+Title164=Blink-182 - The Rock Show
+Length164=-1
+
+File165=https://d1qg6pckcqcdk0.cloudfront.net/modernrock/stonetemplepilots_al0358_744-16daysoftheweek.m4a
+Title165=Stone Temple Pilots - Days of the Week
+Length165=-1
