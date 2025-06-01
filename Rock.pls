@@ -1,40 +1,46 @@
 [playlist]
-NumberOfEntries=12
+NumberOfEntries=11
 
-File1=https://dl.allflac.com/Store/flac.php?id=161296&sid=4af6a206d0a0c3f8b974cc5ecd034260&song=2
-Title1=Track 01
+File1=https://38s-a.musify.club/get/70/6497474/41093523/1/1/0/adema-immortal.mp3
+Title1=Adema - Immortal
+Length1=-1
 
-File2=https://dl.allflac.com/Store/flac.php?id=297008&sid=5ad86306a90295daea5f10643751f5fc&song=1
-Title2=Track 02
+File2=https://40s.musify.club/get/69/4083758/13927570/1/1/0/mudvayne-forget-to-remember.mp3
+Title2=Mudvayne - Forget to Remember
+Length2=-1
 
-File3=https://dl.allflac.com/Store/flac.php?id=100175&sid=6859b843164ba1d47ff5a23c3199bfe0&song=3
-Title3=Track 03
+File3=https://38s.musify.club/get/69/6682130/40904414/1/1/0/ill-nino-i-am-loco.mp3
+Title3=Ill Niño - I Am Loco
+Length3=-1
 
-File4=https://dl.allflac.com/Store/flac.php?id=49858&sid=054867d7bf4955a5f2d1e150981c12e0&song=6
-Title4=Track 04
+File4=https://39s-a.musify.club/get/71/9731539/25498437/1/1/0/hed-p-e-represent.mp3
+Title4=(hed) p.e. - Represent
+Length4=-1
 
-File5=https://dl.allflac.com/Store/flac.php?id=13476&sid=14be1fbe360f8e66d9927037802dd8e1&song=2
-Title5=Track 05
+File5=https://38s.musify.club/get/68/22180195/57433632/1/1/0/snot-stoopid.mp3
+Title5=Snot - Stoopid
+Length5=-1
 
-File6=https://dl.allflac.com/Store/flac.php?id=261415&sid=82d780511da019dd07b381d2fc7d3c8a&song=3
-Title6=Track 06
+File6=https://38s.musify.club/get/69/6650602/40939411/1/1/0/spineshank-smothered.mp3
+Title6=Spineshank - Smothered
+Length6=-1
 
-File7=https://dl.allflac.com/Store/flac.php?id=260435&sid=8fa555a6eecb038284a55d7a1fd17f1a&song=1
-Title7=Track 07
+File7=https://39s-a.musify.club/get/70/6469751/18979156/1/1/0/skindred-nobody.mp3
+Title7=Skindred - Nobody
+Length7=-1
 
-File8=https://dl.allflac.com/Store/flac.php?id=297260&sid=22c1f64dc58a4fa6cc8141bd73bce351&song=15
-Title8=Track 08
+File8=https://39s-a.musify.club/get/70/6474648/18987216/1/1/0/sevendust-enemy.mp3
+Title8=Sevendust - Enemy
+Length8=-1
 
-File9=https://dl.allflac.com/Store/flac.php?id=219683&sid=7387a72d97e8c82c8856a4ad4ddeb1d9&song=1
-Title9=Track 09
+File9=https://38s-a.musify.club/get/70/2078587/16783788/1/1/0/drowning-pool-tear-away.mp3
+Title9=Drowning Pool - Tear Away
+Length9=-1
 
-File10=https://dl.allflac.com/Store/flac.php?id=90657&sid=8f656fbd67cf12a7943bbf49dc376c26&song=3
-Title10=Track 10
+File10=https://41s-a.musify.club/get/70/14682246/37372984/1/1/0/otep-confrontation.mp3
+Title10=Otep - Confrontation
+Length10=-1
 
-File11=https://dl.allflac.com/Store/flac.php?id=490078&sid=6e5741cc1ce5303f075a102309d326cb&song=1
-Title11=Track 11
-
-File12=https://dl.allflac.com/Store/flac.php?id=100343&sid=a42816e265ef96a3c61a02588350cb90&song=4
-Title12=Track 12
-
-Version=2
+File11=https://40s.musify.club/get/69/5194014/16819168/1/1/0/crossfade-the-deep-end.mp3
+Title11=Crossfade - The Deep End
+Length11=-1
