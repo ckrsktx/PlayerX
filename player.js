@@ -26,7 +26,7 @@ class FinetuneBarPlayer {
         this.wakeLock = null;
 
         // URL da playlist (mesmo repo, pasta raiz)
-        this.playlistURL = 'playlist.json';
+        this.playlistURL = 'https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json';
 
         this.init();
     }
