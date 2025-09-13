@@ -1,75 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alternative Now!</title>
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alternative Now!</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="player-bar">
-        <div class="playlist-header">
-            <h1 class="playlist-title">Alternative Now!</h1>
-        </div>
+  <div class="player">
+    <h1 class="title">Alternative Now!</h1>
 
-        <div class="player-main">
-            <div class="track-info-small">
-                <div class="track-title-small" id="trackTitleSmall">Carregando...</div>
-                <div class="track-artist-small" id="trackArtistSmall">Aguarde</div>
-            </div>
-        </div>
-
-        <div class="controls-container">
-            <div class="controls-main">
-                <button class="control-btn-small" id="prevBtnSmall" title="Anterior (←)">
-                    <svg class="icon icon-prev" viewBox="0 0 24 24">
-                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
-                    </svg>
-                </button>
-
-                <button class="control-btn-small play-btn-small" id="playBtnSmall" title="Play/Pause (Espaço)">
-                    <svg class="icon icon-play" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"></path>
-                    </svg>
-                </button>
-
-                <button class="control-btn-small" id="nextBtnSmall" title="Próximo (→)">
-                    <svg class="icon icon-next" viewBox="0 0 24 24">
-                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
-                    </svg>
-                </button>
-
-                <button class="control-btn-small shuffle-btn-small" id="shuffleBtnSmall" title="Aleatório (S)">
-                    <svg class="icon icon-shuffle" viewBox="0 0 24 24">
-                        <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <div class="progress-container-small">
-            <div class="progress-bar-small" id="progressBarSmall">
-                <div class="progress-small" id="progressSmall"></div>
-            </div>
-            <div class="time-info-small">
-                <span id="currentTimeSmall">0:00</span>
-                <span id="durationSmall">0:00</span>
-            </div>
-        </div>
-
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Buscar músicas, artistas ou álbuns...">
-            <span class="search-icon">🔍</span>
-        </div>
-
-        <div class="playlist-container" id="playlistContainer">
-            <div style="text-align: center; color: rgba(255,255,255,0.6); padding: 30px; font-size: 14px;">
-                Carregando playlist...
-            </div>
-        </div>
+    <div class="track-info">
+      <div id="trackTitle">Carregando...</div>
+      <div id="trackArtist">Aguarde</div>
     </div>
 
-    <audio id="audioPlayerSmall" preload="metadata"></audio>
-    <script src="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/player.js"></script>
+    <div class="controls">
+      <button id="prevBtn" title="Anterior">⏮</button>
+      <button id="playBtn" title="Play/Pause">▶</button>
+      <button id="nextBtn" title="Próximo">⏭</button>
+      <button id="shuffleBtn" title="Aleatório">🔀</button>
+    </div>
+
+    <div class="progress-box">
+      <div id="progressBar">
+        <div id="progress"></div>
+      </div>
+      <div class="time">
+        <span id="currentTime">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar música ou artista..." />
+    </div>
+
+    <div id="playlist"></div>
+  </div>
+
+  <audio id="audioPlayer" preload="metadata"></audio>
+  <script src="script.js"></script>
 </body>
 </html>
