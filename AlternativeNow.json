@@ -1,5 +1,96 @@
 [
   {
+    "title": "Come Alive",
+    "artist": "Phantogram",
+    "album": "Memory of a Day",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/indie2/phantogram_memoryofaday_09_comealive.m4a",
+    "duration": "3:42"
+  },
+  {
+    "title": "Starburster",
+    "artist": "Fontaines D.C.",
+    "album": "Romance",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/indie2/fontainesdc_romance_01_starburster.m4a",
+    "duration": "4:15"
+  },
+  {
+    "title": "Even If It Kills Me",
+    "artist": "Papa Roach",
+    "album": "Even If It Kills Me",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/paparoach_evenifitkillsmesingle_01_evenifitkillsme.m4a",
+    "duration": "3:28"
+  },
+  {
+    "title": "As Alive As You Need Me...",
+    "artist": "Nine Inch Nails",
+    "album": "Tron: Ares (OST)",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/nineinchnails_tronaresoriginalmotionpicturesoundtrack_01_asaliveasyouneedmetoberadioedit.m4a",
+    "duration": "3:51"
+  },
+  {
+    "title": "Make It All Right",
+    "artist": "The Offspring",
+    "album": "Supercharged",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/indie2/offspringthe_supercharged_04_makeitallright.m4a",
+    "duration": "3:33"
+  },
+  {
+    "title": "Too Sweet",
+    "artist": "Hozier",
+    "album": "Unreal Unearth: Unheard",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/hozier_unrealunearthunheard_01_toosweetradioedit.m4a",
+    "duration": "4:12"
+  },
+  {
+    "title": "Hot Stuff",
+    "artist": "Blue October",
+    "album": "Hot Stuff",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/blueoctober_hotstuffsingle_01_hotstuff.m4a",
+    "duration": "3:45"
+  },
+  {
+    "title": "Murder on the Dancefloor...",
+    "artist": "Royel Otis",
+    "album": "Murder on the Dancefloor",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/royelotis_murderonthedancefloortriplejlikeaversionsingle_01_murderonthedancefloortriplejlikeaversion.m4a",
+    "duration": "4:03"
+  },
+  {
+    "title": "Happy",
+    "artist": "Something Corporate",
+    "album": "Happy Single",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/somethingcorporate_happysingle_11_happyradioedit.m4a",
+    "duration": "3:29"
+  },
+  {
+    "title": "Nice to Meet You",
+    "artist": "Myles Smith",
+    "album": "A Minute EP",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/smithmyles_aminuteep_01_nicetomeetyou.m4a",
+    "duration": "3:31"
+  },
+  {
+    "title": "Archbishop Harold Holmes",
+    "artist": "White Jack",
+    "album": "No Name",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/whitejack_noname_05_archbishopharoldholmes.m4a",
+    "duration": "4:15"
+  },
+  {
+    "title": "Strange Friends",
+    "artist": "Little Image",
+    "album": "Strange Friends",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/littleimage_strangefriendssingle_01_strangefriends.m4a",
+    "duration": "3:28"
+  },
+  {
+    "title": "Easy Come Easy Go",
+    "artist": "The All-American Rejects",
+    "album": "Easy Come Easy Go",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/allamericanrejectsthe_easycomeeasygosingle_01_easycomeeasygo.m4a",
+    "duration": "3:51"
+  },
+  {
     "title": "I Will Not Break",
     "artist": "Disturbed",
     "album": "I Will Not Break",
