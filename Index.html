@@ -117,7 +117,11 @@ shuffleBtn.onclick=()=>{
 a.addEventListener('loadedmetadata',()=>{seek.max=a.duration;totSpan.textContent=fmt(a.duration);});
 a.addEventListener('timeupdate',()=>{seek.value=a.currentTime;curSpan.textContent=fmt(a.currentTime);});
 seek.addEventListener('input',()=>a.currentTime=seek.value);
-a.addEventListener('ended',()=>nextBtn.onclick());
+/*  ↓↓↓  CORREÇÃO: avança e dá play sozinho  ↓↓↓  */
+a.addEventListener('ended',()=>{
+  nextBtn.onclick();        // já contém lógica shuffle / normal
+  a.play().catch(()=>{});   // garante que inicie
+});
 
 searchBox.addEventListener('input',()=>{
   const q=searchBox.value.toLowerCase();
