@@ -1,45 +1,129 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alternative Now!</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="utf-8">
+<title>AltNOW</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#2c0c4a">
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#1f0530;--card:#2c0c4a;--fg:#f2e6ff;--accent:#b266ff;--gray:#4a3f5e}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
+body{height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.card{width:92vw;max-width:360px;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(178,102,255,.25);border:1px solid #3a1a5e}
+.top{padding:20px 24px 8px;display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:700}
+#now{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
+#pl{height:200px;overflow:auto;padding:0 24px 16px;font-size:15px;line-height:1.8;scroll-behavior:smooth}
+#pl div{cursor:pointer;padding:6px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid var(--gray)}
+#pl div:last-child{border:none}
+#pl .on{color:var(--accent);font-weight:700;transform:scale(1.05)}
+#time{font-size:12px;text-align:center;color:var(--accent);margin:8px 0;font-weight:600}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:20px;padding:16px 24px}
+.ctrl button{background:none;border:none;color:var(--fg);font-size:28px;outline:none;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;transition:background .2s,color .2s}
+.ctrl button:active{background:rgba(255,255,255,.1)}
+#seek{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:var(--gray);border-radius:3px;outline:none;margin:8px 0}
+#seek::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;border:3px solid var(--card);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+#seek::-moz-range-thumb{width:18px;height:18px;background:var(--accent);border-radius:50%;border:3px solid var(--card)}
+#search{width:100%;border:none;background:var(--gray);color:var(--fg);padding:12px 16px;font-size:14px;border-radius:8px;outline:none}
+#shuffleBtn.active{color:var(--accent)}
+</style>
 </head>
 <body>
-  <div class="player">
-    <h1 class="title">Alternative Now!</h1>
 
-    <div class="track-info">
-      <div id="trackTitle">Carregando...</div>
-      <div id="trackArtist">Aguarde</div>
-    </div>
-
-    <div class="controls">
-      <button id="prevBtn" title="Anterior">⏮</button>
-      <button id="playBtn" title="Play/Pause">▶</button>
-      <button id="nextBtn" title="Próximo">⏭</button>
-      <button id="shuffleBtn" title="Aleatório">🔀</button>
-    </div>
-
-    <div class="progress-box">
-      <div id="progressBar">
-        <div id="progress"></div>
-      </div>
-      <div class="time">
-        <span id="currentTime">0:00</span>
-        <span id="duration">0:00</span>
-      </div>
-    </div>
-
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Buscar música ou artista..." />
-    </div>
-
-    <div id="playlist"></div>
+<div class="card">
+  <div class="top">
+    <span id="now">AltNOW</span>
+    <button id="shuffleBtn" title="Aleatório">⇄</button>
   </div>
 
-  <audio id="audioPlayer" preload="metadata"></audio>
-  <script src="script.js"></script>
+  <div id="time"><span id="cur">0:00</span> / <span id="tot">0:00</span></div>
+  <input id="seek" type="range" min="0" max="100" value="0">
+
+  <div class="ctrl">
+    <button id="prev">⏮</button>
+    <button id="play">▶</button>
+    <button id="next">⏭</button>
+  </div>
+
+  <div id="pl"></div>
+  <input id="search" placeholder="Buscar na playlist…">
+</div>
+
+<audio id="a" preload="metadata"></audio>
+
+<script>
+/* ---- service-worker registro ---- */
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+
+const a=document.getElementById('a'), playBtn=document.getElementById('play'),
+      nextBtn=document.getElementById('next'), prevBtn=document.getElementById('prev'),
+      shuffleBtn=document.getElementById('shuffleBtn'), seek=document.getElementById('seek'),
+      curSpan=document.getElementById('cur'), totSpan=document.getElementById('tot'),
+      plBox=document.getElementById('pl'), searchBox=document.getElementById('search'),
+      nowSpan=document.getElementById('now');
+
+let tracks=[], idx=0, shuffle=false, filtered=[], firstPlay=true;
+
+fetch('https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json')
+  .then(r=>r.json()).then(list=>{tracks=list;filtered=list;render();})
+  .catch(err=>alert('Erro ao carregar playlist'));
+
+function render(){
+  plBox.innerHTML='';
+  filtered.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.textContent=`${t.title} — ${t.artist}`;
+    div.onclick=()=>select(tracks.indexOf(t));
+    plBox.appendChild(div);
+  });
+}
+function select(i){
+  idx=i;
+  a.src=tracks[i].url;
+  nowSpan.textContent=tracks[i].title;
+  highlight();
+  scrollToCurrent();
+  a.play().catch(()=>{}); playBtn.textContent='❚❚'; firstPlay=false;
+}
+function play(){
+  if(firstPlay){select(0); return;}
+  a.play().catch(()=>{}); playBtn.textContent='❚❚';
+}
+function pause(){a.pause(); playBtn.textContent='▶';}
+function highlight(){
+  const on=tracks[idx];
+  [...plBox.children].forEach(c=>{
+    c.classList.toggle('on',c.textContent.includes(on.title));
+  });
+}
+function scrollToCurrent(){
+  const el=plBox.querySelector('.on');
+  if(el)el.scrollIntoView({block:'center',behavior:'smooth'});
+}
+function fmt(s){const m=Math.floor(s/60);return m+':'+('0'+Math.floor(s%60)).slice(-2);}
+
+playBtn.onclick=()=>a.paused?play():pause();
+nextBtn.onclick=()=>{
+  if(shuffle){idx=Math.floor(Math.random()*tracks.length);}
+  else{idx=(idx+1)%tracks.length;}
+  select(idx);
+};
+prevBtn.onclick=()=>{idx=(idx-1+tracks.length)%tracks.length; select(idx);};
+shuffleBtn.onclick=()=>{
+  shuffle=!shuffle;
+  shuffleBtn.classList.toggle('active',shuffle);
+};
+
+a.addEventListener('loadedmetadata',()=>{seek.max=a.duration;totSpan.textContent=fmt(a.duration);});
+a.addEventListener('timeupdate',()=>{seek.value=a.currentTime;curSpan.textContent=fmt(a.currentTime);});
+seek.addEventListener('input',()=>a.currentTime=seek.value);
+a.addEventListener('ended',()=>nextBtn.onclick());
+
+searchBox.addEventListener('input',()=>{
+  const q=searchBox.value.toLowerCase();
+  filtered=tracks.filter(t=>t.title.toLowerCase().includes(q)||t.artist.toLowerCase().includes(q));
+  render(); highlight();
+});
+</script>
 </body>
 </html>
