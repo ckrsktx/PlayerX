@@ -1,5 +1,117 @@
 [
   {
+    "title": "I Will Not Break",
+    "artist": "Disturbed",
+    "album": "I Will Not Break",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/disturbed_iwillnotbreaksingle_01_iwillnotbreak.m4a",
+    "duration": "3:42"
+  },
+  {
+    "title": "Champagne",
+    "artist": "Declan McKenna",
+    "album": "Champagne, That’s Life",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/mckennadeclan_champagnethatslife_01_champagne.m4a",
+    "duration": "4:15"
+  },
+  {
+    "title": "Awaken",
+    "artist": "Breaking Benjamin",
+    "album": "Awaken",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/breakingbenjamin_awakensingle_01_awaken.m4a",
+    "duration": "3:28"
+  },
+  {
+    "title": "Lucy",
+    "artist": "Mt. Joy",
+    "album": "Hope We Have Fun",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/mtjoy_hopewehavefun_07_lucyclean.m4a",
+    "duration": "3:51"
+  },
+  {
+    "title": "It’s Amazing to Be Young",
+    "artist": "Fontaines D.C.",
+    "album": "Romance (Deluxe Edition)",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/fontainesdc_romancedeluxeedition_12_itsamazingtobeyoung.m4a",
+    "duration": "3:33"
+  },
+  {
+    "title": "Messy",
+    "artist": "Young Lola",
+    "album": "This Wasn’t Meant for You Anyway",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/younglola_thiswasntmeantforyouanyway_05_messyradioedit.m4a",
+    "duration": "4:12"
+  },
+  {
+    "title": "Dilemma",
+    "artist": "Green Day",
+    "album": "Saviors",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/greenday_saviors_14_dilemma.m4a",
+    "duration": "3:45"
+  },
+  {
+    "title": "Rainbow",
+    "artist": "Cage the Elephant",
+    "album": "Neon Pill",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/cagetheelephant_neonpill_01_rainbow.m4a",
+    "duration": "4:03"
+  },
+  {
+    "title": "Leave a Light On (Talk Away the Dark)",
+    "artist": "Papa Roach",
+    "album": "Ego Trip",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/paparoach_egotrip_10_leavealightontalkawaythedark.m4a",
+    "duration": "3:29"
+  },
+  {
+    "title": "Not Sorry",
+    "artist": "Pistols at Dawn",
+    "album": "Not Sorry",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/pistolsatdawn_notsorrysingle_01_notsorryclean.m4a",
+    "duration": "3:31"
+  },
+  {
+    "title": "Beautiful Things",
+    "artist": "Benson Boone",
+    "album": "Beautiful Things",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/boonebenson_beautifulthingssingle_01_beautifulthings.m4a",
+    "duration": "4:15"
+  },
+  {
+    "title": "Moody",
+    "artist": "Royel Otis",
+    "album": "Moody",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/royelotis_moodysingle_01_moody.m4a",
+    "duration": "3:28"
+  },
+  {
+    "title": "Enough Is Enough",
+    "artist": "The Hives",
+    "album": "The Hives Forever Forever the Hives",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/hivesthe_thehivesforeverforeverthehives_02_enoughisenough.m4a",
+    "duration": "3:51"
+  },
+  {
+    "title": "Stargazing",
+    "artist": "Myles Smith",
+    "album": "Stargazing",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/smithmyles_stargazingsingle_01_stargazing.m4a",
+    "duration": "3:33"
+  },
+  {
+    "title": "Get Off My Phone",
+    "artist": "Driver Era",
+    "album": "Get Off My Phone",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/drivererathe_getoffmyphonesingle_1_getoffmyphone.m4a",
+    "duration": "4:12"
+  },
+  {
+    "title": "Vertigo",
+    "artist": "Beach Bunny",
+    "album": "Vertigo",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/beachbunny_vertigosingle_01_vertigo.m4a",
+    "duration": "3:45"
+  },
+  {
     "title": "After Life",
     "artist": "Evanescence",
     "album": "After Life",
