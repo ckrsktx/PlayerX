@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Player Alternative NOW!</title>
+<style>
+body{font-family:Tahoma,Arial,sans-serif;color:#e0e0e0;margin:0;height:100vh;display:flex;justify-content:center;align-items:center;background:#2c2c2c;transition:background 0.5s ease;}
+.player{width:90%;max-width:400px;background:#1e1e1e;border-radius:15px;box-shadow:0 0 20px rgba(0,0,0,0.7);padding:15px;display:flex;flex-direction:column;}
+.track-info{display:flex;align-items:center;border-bottom:1px solid #444;padding-bottom:10px;margin-bottom:10px;}
+.track-cover{width:60px;height:60px;margin-right:10px;border-radius:6px;background:#555;display:flex;justify-content:center;align-items:center;font-size:24px;color:#999;background-size:cover;background-position:center;}
+.track-text h2{margin:0;font-size:2vh;color:#fff;}
+.track-text p{margin:2px 0 0;font-size:1.8vh;color:#aaa;}
+.controls{display:flex;justify-content:space-around;gap:10px;padding:10px 0;align-items:center;}
+.controls button{flex:1;background:#2c2c2c;border:1px solid #555;color:#eee;padding:12px;cursor:pointer;max-width:100px;}
+.controls button:hover{background:#3a3a3a;}
+.controls button#shuffle.active{color:#ff4081;}
+.progress-area{display:flex;align-items:center;gap:5px;}
+.progress-area input[type="range"]{flex:1;}
+.time{font-size:1.6vh;color:#aaa;width:45px;text-align:right;}
+.footer{background:#1a1a1a;border-top:1px solid #444;text-align:center;padding:8px;font-size:1.8vh;color:#ff4081;font-weight:bold;margin-top:10px;border-radius:0 0 15px 15px;}
+.search-bar{display:flex; gap:5px;}
+.search-bar input{flex:1;padding:8px;border:1px solid #555;background:#2c2c2c;color:#eee;font-size:1.8vh;}
+.search-bar button{padding:8px 12px;border:1px solid #555;background:#2c2c2c;color:#eee;cursor:pointer;font-size:1.8vh;}
+.search-results{position:fixed; top:10%; left:50%; transform:translateX(-50%); width:90%; max-width:500px; background:#1a1a1a; border:1px solid #555; box-shadow:0 0 10px #000; padding:10px; display:none; z-index:1000; max-height:70vh; overflow-y:auto;}
+.search-results h3{margin:0 0 8px; font-size:2vh; color:#fff; display:flex; justify-content:space-between; align-items:center;}
+.search-results h3 button{background:none;border:none;color:#f55;font-weight:bold;cursor:pointer;font-size:2.2vh;}
+.search-results ul{list-style:none;margin:0;padding:0;}
+.search-results li{padding:8px; border-bottom:1px solid #333; cursor:pointer;font-size:1.8vh;}
+.search-results li:hover{background:#333;}
+</style>
+</head>
+<body>
+<div class="player">
+  <div class="track-info">
+    <div id="cover" class="track-cover">⭐</div>
+    <div class="track-text">
+      <h2 id="track-title">Carregando...</h2>
+      <p id="track-artist"></p>
+      <p id="track-year"></p>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="prev">Prev</button>
+    <button id="play">Play</button>
+    <button id="next">Next</button>
+    <button id="shuffle">Shuffle</button>
+    <button id="mute">🔇</button>
+  </div>
+  <div class="progress-area">
+    <input type="range" id="progress" value="0" min="0" max="100">
+    <span class="time" id="current-time">0:00</span>
+    <span class="time" id="duration">0:00</span>
+  </div>
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Buscar música ou artista...">
+    <button id="search-btn">Buscar</button>
+  </div>
+  <div class="footer">Alternative NOW!</div>
+</div>
+<div class="search-results" id="search-results">
+  <h3>Resultados <button id="close-search">X</button></h3>
+  <ul id="results-list"></ul>
+</div>
+<script>
+const PLAYLIST_URL='https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json';
+let playlist=[], currentTrack=0, shuffleMode=false;
+const audio=new Audio(), trackTitle=document.getElementById('track-title'), trackArtist=document.getElementById('track-artist'), trackYear=document.getElementById('track-year'), cover=document.getElementById('cover');
+const playBtn=document.getElementById('play'), nextBtn=document.getElementById('next'), prevBtn=document.getElementById('prev'), shuffleBtn=document.getElementById('shuffle'), muteBtn=document.getElementById('mute');
+const progress=document.getElementById('progress'), currentTime=document.getElementById('current-time'), duration=document.getElementById('duration');
+const searchInput=document.getElementById('search-input'), searchBtn=document.getElementById('search-btn'), searchResults=document.getElementById('search-results'), resultsList=document.getElementById('results-list'), closeSearch=document.getElementById('close-search');
+
+fetch(PLAYLIST_URL).then(r=>r.json()).then(data=>{playlist=data; loadTrack(currentTrack);}).catch(console.error);
+
+function setBackgroundFromImage(img){const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);const d=ctx.getImageData(0,0,img.width,img.height).data;let r=0,g=0,b=0,count=0;for(let i=0;i<d.length;i+=4*10){r+=d[i];g+=d[i+1];b+=d[i+2];count++;}document.body.style.background=`rgb(${Math.floor(r/count)},${Math.floor(g/count)},${Math.floor(b/count)})`; }
+
+function loadTrack(i){
+  const t=playlist[i]; audio.src=t.url; trackTitle.textContent=t.title||"Sem título";
+  trackArtist.textContent=t.artist||"Desconhecido"; trackYear.textContent="";
+  document.title=`${t.title||"Sem título"} - ${t.artist||"Desconhecido"} 🎵`;
+  cover.textContent="⭐"; cover.style.backgroundImage=""; document.body.style.background="#2c2c2c";
+  fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(t.artist+" "+(t.album||""))}&entity=album&limit=1`)
+  .then(r=>r.json()).then(d=>{if(d.results?.length>0){const art=d.results[0].artworkUrl100.replace("100x100","300x300");cover.textContent="";cover.style.backgroundImage=`url(${art})`;trackYear.textContent=new Date(d.results[0].releaseDate).getFullYear();const img=new Image();img.crossOrigin="Anonymous";img.src=art;img.onload=()=>setBackgroundFromImage(img);}}).catch(()=>{cover.textContent="⭐";});
+}
+
+function playTrack(){audio.play(); playBtn.textContent='Pause';}
+function pauseTrack(){audio.pause(); playBtn.textContent='Play';}
+
+playBtn.onclick=()=>audio.paused?playTrack():pauseTrack();
+nextBtn.onclick=()=>{currentTrack=shuffleMode?Math.floor(Math.random()*playlist.length):(currentTrack+1)%playlist.length; loadTrack(currentTrack); playTrack();}
+prevBtn.onclick=()=>{currentTrack=(currentTrack-1+playlist.length)%playlist.length; loadTrack(currentTrack); playTrack();}
+shuffleBtn.onclick=()=>{shuffleMode=!shuffleMode;shuffleBtn.classList.toggle('active',shuffleMode);}
+muteBtn.onclick=()=>{audio.muted=!audio.muted; muteBtn.textContent=audio.muted?'🔈':'🔇';}
+
+audio.ontimeupdate=()=>{
+  progress.value=(audio.currentTime/audio.duration)*100||0;
+  let c=Math.floor(audio.currentTime), d=Math.floor(audio.duration||0);
+  currentTime.textContent=Math.floor(c/60)+":"+String(c%60).padStart(2,'0');
+  duration.textContent=Math.floor(d/60)+":"+String(d%60).padStart(2,'0');
+};
+progress.oninput=()=>audio.currentTime=(progress.value/100)*audio.duration;
+audio.onended=()=>nextBtn.click();
+
+// Busca
+searchBtn.onclick=()=>{
+  const q=searchInput.value.toLowerCase(); resultsList.innerHTML=''; if(!q)return;
+  const res=playlist.filter(t=>(t.title?.toLowerCase().includes(q))||(t.artist?.toLowerCase().includes(q)));
+  if(res.length===0) resultsList.innerHTML='<li>Nenhum resultado</li>';
+  else res.forEach(t=>{const li=document.createElement('li');li.textContent=`${t.title} - ${t.artist}`;li.onclick=()=>{currentTrack=playlist.indexOf(t); loadTrack(currentTrack); playTrack(); searchResults.style.display='none';};resultsList.appendChild(li);});
+  searchResults.style.display='block';
+};
+closeSearch.onclick=()=>searchResults.style.display='none';
+</script>
+</body>
+</html>
