@@ -1,133 +1,318 @@
-<!doctype html>
-<html lang="pt">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<title>AltNOW</title>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#2c0c4a">
-<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Player Soulseek Mobile</title>
 <style>
-:root{--bg:#1f0530;--card:#2c0c4a;--fg:#f2e6ff;--accent:#b266ff;--gray:#4a3f5e}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-user-select:none;user-select:none}
-body{height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-.card{width:92vw;max-width:360px;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(178,102,255,.25);border:1px solid #3a1a5e}
-.top{padding:20px 24px 8px;display:flex;justify-content:space-between;align-items:center;font-size:18px;font-weight:700}
-#now{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%}
-#pl{height:200px;overflow:auto;padding:0 24px 16px;font-size:15px;line-height:1.8;scroll-behavior:smooth}
-#pl div{cursor:pointer;padding:6px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid var(--gray)}
-#pl div:last-child{border:none}
-#pl .on{color:var(--accent);font-weight:700;transform:scale(1.05)}
-#time{font-size:12px;text-align:center;color:var(--accent);margin:8px 0;font-weight:600}
-.ctrl{display:flex;align-items:center;justify-content:center;gap:20px;padding:16px 24px}
-.ctrl button{background:none;border:none;color:var(--fg);font-size:28px;outline:none;display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;transition:background .2s,color .2s}
-.ctrl button:active{background:rgba(255,255,255,.1)}
-#seek{width:100%;height:6px;-webkit-appearance:none;appearance:none;background:var(--gray);border-radius:3px;outline:none;margin:8px 0}
-#seek::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;border:3px solid var(--card);box-shadow:0 2px 6px rgba(0,0,0,.3)}
-#seek::-moz-range-thumb{width:18px;height:18px;background:var(--accent);border-radius:50%;border:3px solid var(--card)}
-#search{width:100%;border:none;background:var(--gray);color:var(--fg);padding:12px 16px;font-size:14px;border-radius:8px;outline:none}
-#shuffleBtn.active{color:var(--accent)}
+  body {
+    font-family: Tahoma, Arial, sans-serif;
+    background: #2c2c2c;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .player {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    padding: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: inset 0 0 10px #000;
+  }
+
+  .track-info {
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .track-info h2 {
+    font-size: 14px;
+    margin: 0;
+    color: #fff;
+  }
+
+  .track-info p {
+    font-size: 12px;
+    margin: 2px 0 0;
+    color: #aaa;
+  }
+
+  audio {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .controls button {
+    flex: 1;
+    background: #2c2c2c;
+    border: 1px solid #555;
+    color: #eee;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .controls button:hover {
+    background: #3a3a3a;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    margin: 5px 0;
+    accent-color: #666;
+  }
+
+  /* Barra de busca */
+  .search-bar {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  .search-bar input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #555;
+    background: #2c2c2c;
+    color: #eee;
+    font-size: 12px;
+  }
+
+  .search-bar button {
+    background: #2c2c2c;
+    border: 1px solid #555;
+    color: #eee;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  /* Caixa flutuante de resultados */
+  .search-results {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: #1a1a1a;
+    border: 1px solid #555;
+    box-shadow: 0 0 10px #000;
+    padding: 10px;
+    display: none;
+    z-index: 1000;
+  }
+
+  .search-results h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .search-results h3 button {
+    background: none;
+    border: none;
+    color: #f55;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .search-results ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .search-results li {
+    padding: 6px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .search-results li:hover {
+    background: #333;
+  }
+
 </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="top">
-    <span id="now">AltNOW</span>
-    <button id="shuffleBtn" title="Aleatório">⇄</button>
+<div class="player">
+  <div class="track-info">
+    <h2 id="track-title">Carregando...</h2>
+    <p id="track-artist"></p>
   </div>
 
-  <div id="time"><span id="cur">0:00</span> / <span id="tot">0:00</span></div>
-  <input id="seek" type="range" min="0" max="100" value="0">
+  <audio id="audio"></audio>
 
-  <div class="ctrl">
-    <button id="prev">⏮</button>
-    <button id="play">▶</button>
-    <button id="next">⏭</button>
+  <input type="range" id="progress" value="0" min="0" max="100">
+
+  <div class="controls">
+    <button id="prev">Prev</button>
+    <button id="play">Play</button>
+    <button id="next">Next</button>
+    <button id="shuffle">Shuffle</button>
   </div>
 
-  <div id="pl"></div>
-  <input id="search" placeholder="Buscar na playlist…">
+  <label style="font-size:12px;">Volume</label>
+  <input type="range" id="volume" value="100" min="0" max="100">
+
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Buscar música ou artista...">
+    <button id="search-btn">Buscar</button>
+  </div>
 </div>
 
-<audio id="a" preload="metadata"></audio>
+<div class="search-results" id="search-results">
+  <h3>Resultados <button id="close-search">X</button></h3>
+  <ul id="results-list"></ul>
+</div>
 
 <script>
-/* ---- service-worker registro ---- */
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+const PLAYLIST_URL = 'https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json';
 
-const a=document.getElementById('a'), playBtn=document.getElementById('play'),
-      nextBtn=document.getElementById('next'), prevBtn=document.getElementById('prev'),
-      shuffleBtn=document.getElementById('shuffleBtn'), seek=document.getElementById('seek'),
-      curSpan=document.getElementById('cur'), totSpan=document.getElementById('tot'),
-      plBox=document.getElementById('pl'), searchBox=document.getElementById('search'),
-      nowSpan=document.getElementById('now');
+let playlist = [];
+let currentTrack = 0;
+let shuffleMode = false;
 
-let tracks=[], idx=0, shuffle=false, filtered=[], firstPlay=true;
+const audio = document.getElementById('audio');
+const trackTitle = document.getElementById('track-title');
+const trackArtist = document.getElementById('track-artist');
+const playBtn = document.getElementById('play');
+const nextBtn = document.getElementById('next');
+const prevBtn = document.getElementById('prev');
+const shuffleBtn = document.getElementById('shuffle');
+const progress = document.getElementById('progress');
+const volume = document.getElementById('volume');
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+const searchResults = document.getElementById('search-results');
+const resultsList = document.getElementById('results-list');
+const closeSearch = document.getElementById('close-search');
 
-fetch('https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json')
-  .then(r=>r.json()).then(list=>{tracks=list;filtered=list;render();})
-  .catch(err=>alert('Erro ao carregar playlist'));
+fetch(PLAYLIST_URL)
+  .then(res => res.json())
+  .then(data => {
+    playlist = data;
+    loadTrack(currentTrack);
+  })
+  .catch(err => console.error('Erro ao carregar playlist:', err));
 
-function render(){
-  plBox.innerHTML='';
-  filtered.forEach((t,i)=>{
-    const div=document.createElement('div');
-    div.textContent=`${t.title} — ${t.artist}`;
-    div.onclick=()=>select(tracks.indexOf(t));
-    plBox.appendChild(div);
-  });
+function loadTrack(index) {
+  const track = playlist[index];
+  audio.src = track.url;
+  trackTitle.textContent = track.title || "Sem título";
+  trackArtist.textContent = track.artist || "Desconhecido";
+  audio.load();
 }
-function select(i){
-  idx=i;
-  a.src=tracks[i].url;
-  nowSpan.textContent=tracks[i].title;
-  highlight();
-  scrollToCurrent();
-  a.play().catch(()=>{}); playBtn.textContent='❚❚'; firstPlay=false;
-}
-function play(){
-  if(firstPlay){select(0); return;}
-  a.play().catch(()=>{}); playBtn.textContent='❚❚';
-}
-function pause(){a.pause(); playBtn.textContent='▶';}
-function highlight(){
-  const on=tracks[idx];
-  [...plBox.children].forEach(c=>{
-    c.classList.toggle('on',c.textContent.includes(on.title));
-  });
-}
-function scrollToCurrent(){
-  const el=plBox.querySelector('.on');
-  if(el)el.scrollIntoView({block:'center',behavior:'smooth'});
-}
-function fmt(s){const m=Math.floor(s/60);return m+':'+('0'+Math.floor(s%60)).slice(-2);}
 
-playBtn.onclick=()=>a.paused?play():pause();
-nextBtn.onclick=()=>{
-  if(shuffle){idx=Math.floor(Math.random()*tracks.length);}
-  else{idx=(idx+1)%tracks.length;}
-  select(idx);
-};
-prevBtn.onclick=()=>{idx=(idx-1+tracks.length)%tracks.length; select(idx);};
-shuffleBtn.onclick=()=>{
-  shuffle=!shuffle;
-  shuffleBtn.classList.toggle('active',shuffle);
-};
+function playTrack() {
+  audio.play();
+  playBtn.textContent = 'Pause';
+}
 
-a.addEventListener('loadedmetadata',()=>{seek.max=a.duration;totSpan.textContent=fmt(a.duration);});
-a.addEventListener('timeupdate',()=>{seek.value=a.currentTime;curSpan.textContent=fmt(a.currentTime);});
-seek.addEventListener('input',()=>a.currentTime=seek.value);
-/*  ↓↓↓  CORREÇÃO: avança e dá play sozinho  ↓↓↓  */
-a.addEventListener('ended',()=>{
-  nextBtn.onclick();        // já contém lógica shuffle / normal
-  a.play().catch(()=>{});   // garante que inicie
+function pauseTrack() {
+  audio.pause();
+  playBtn.textContent = 'Play';
+}
+
+playBtn.addEventListener('click', () => {
+  if (audio.paused) playTrack();
+  else pauseTrack();
 });
 
-searchBox.addEventListener('input',()=>{
-  const q=searchBox.value.toLowerCase();
-  filtered=tracks.filter(t=>t.title.toLowerCase().includes(q)||t.artist.toLowerCase().includes(q));
-  render(); highlight();
+nextBtn.addEventListener('click', () => {
+  if (shuffleMode) {
+    currentTrack = Math.floor(Math.random() * playlist.length);
+  } else {
+    currentTrack = (currentTrack + 1) % playlist.length;
+  }
+  loadTrack(currentTrack);
+  playTrack();
+});
+
+prevBtn.addEventListener('click', () => {
+  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+  loadTrack(currentTrack);
+  playTrack();
+});
+
+shuffleBtn.addEventListener('click', () => {
+  shuffleMode = !shuffleMode;
+  shuffleBtn.style.background = shuffleMode ? "#3a3a3a" : "#2c2c2c";
+});
+
+audio.addEventListener('timeupdate', () => {
+  const percent = (audio.currentTime / audio.duration) * 100;
+  progress.value = percent || 0;
+});
+
+progress.addEventListener('input', () => {
+  audio.currentTime = (progress.value / 100) * audio.duration;
+});
+
+volume.addEventListener('input', () => {
+  audio.volume = volume.value / 100;
+});
+
+audio.addEventListener('ended', () => {
+  nextBtn.click();
+});
+
+// Busca
+searchBtn.addEventListener('click', () => {
+  const query = searchInput.value.toLowerCase();
+  resultsList.innerHTML = '';
+  if (!query) return;
+
+  const results = playlist.filter(track =>
+    (track.title && track.title.toLowerCase().includes(query)) ||
+    (track.artist && track.artist.toLowerCase().includes(query))
+  );
+
+  if (results.length === 0) {
+    resultsList.innerHTML = '<li>Nenhum resultado</li>';
+  } else {
+    results.forEach((track, index) => {
+      const li = document.createElement('li');
+      li.textContent = `${track.title} - ${track.artist}`;
+      li.addEventListener('click', () => {
+        currentTrack = playlist.indexOf(track);
+        loadTrack(currentTrack);
+        playTrack();
+        searchResults.style.display = 'none';
+      });
+      resultsList.appendChild(li);
+    });
+  }
+  searchResults.style.display = 'block';
+});
+
+closeSearch.addEventListener('click', () => {
+  searchResults.style.display = 'none';
 });
 </script>
+
 </body>
-</html>
+  </html>
