@@ -1,5 +1,80 @@
 [
   {
+    "title": "Bloom Baby Bloom",
+    "artist": "Wolf Alice",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/wolfalice_theclearing_02_bloombabybloom.m4a"
+  },
+  {
+    "title": "Bobby Sox",
+    "artist": "Green Day",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/greenday_saviors_03_bobbysox.m4a"
+  },
+  {
+    "title": "Downstairs",
+    "artist": "Maeson Matt",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/maesonmatt_aquietandharmlessliving_04_downstairs.m4a"
+  },
+  {
+    "title": "Sailor Song",
+    "artist": "Perez Gigi",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/perezgigi_sailorsongsingle_01_sailorsong.m4a"
+  },
+  {
+    "title": "Vampire Bat",
+    "artist": "Glass Animals",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/glassanimals_vampirebatsingle_01_vampirebat.m4a"
+  },
+  {
+    "title": "Addicted To The Wicked And Twisted",
+    "artist": "Palaye Royale",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/palayeroyale_deathorglory_09_addictedtothewickedandtwistedclean.m4a"
+  },
+  {
+    "title": "Relationships",
+    "artist": "Haim",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/haim_relationshipssingle_01_relationshipsclean.m4a"
+  },
+  {
+    "title": "Psycho",
+    "artist": "Hardy",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/hardy_quit_05_psychoclean.m4a"
+  },
+  {
+    "title": "The Emptiness Machine",
+    "artist": "Linkin Park",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/linkinpark_fromzero_02_theemptinessmachine.m4a"
+  },
+  {
+    "title": "Catch These Fists",
+    "artist": "Wet Leg",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/wetleg_moisturizer_03_catchthesefists.m4a"
+  },
+  {
+    "title": "All My Life",
+    "artist": "Falling In Reverse",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/indie2/fallinginreverse_popularmonster_03_allmylife.m4a"
+  },
+  {
+    "title": "This Movie Sucks",
+    "artist": "Durry",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/durry_thismoviesucks_03_thismoviesucks.m4a"
+  },
+  {
+    "title": "Good Things",
+    "artist": "Ekoh Lospirit",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/ekohlospirit_pressure_05_goodthingsclean.m4a"
+  },
+  {
+    "title": "Hell Is Empty",
+    "artist": "Memphis May Fire",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/memphismayfire_shapeshifter_05_hellisempty.m4a"
+  },
+  {
+    "title": "Barbarian",
+    "artist": "AWOLNATION",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/awolnation_thephantomfive_05_barbarian.m4a"
+  },
+  {
     "title": "Come Alive",
     "artist": "Phantogram",
     "album": "Memory of a Day",
