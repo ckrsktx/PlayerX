@@ -1,4 +1,54 @@
  [
+  {
+    "artist": "The Cranberries",
+    "title": "Linger",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/cranberriesthe_ch0353_linger.m4a"
+  },
+  {
+    "artist": "Boyz II Men",
+    "title": "On Bended Knee",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/boyziimen_chrgold44_onbendedkneeradio.m4a"
+  },
+  {
+    "artist": "Sheryl Crow",
+    "title": "Everyday Is a Winding Road",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/crowsheryl_ch0312_everydayisawindin.m4a"
+  },
+  {
+    "artist": "Rod Stewart",
+    "title": "Have I Told You Lately",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/stewartrod_chrgold27_haveitoldyoulatel.m4a"
+  },
+  {
+    "artist": "Radiohead",
+    "title": "Creep",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/radiohead_al314_creep.m4a"
+  },
+  {
+    "artist": "Green Day",
+    "title": "Longview",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/greenday_al0347_693-02longviewveryclean.m4a"
+  },
+  {
+    "artist": "Backstreet Boys",
+    "title": "Everybody (Backstreet's Back)",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/backstreetboys_ch0315_everybodybackstre.m4a"
+  },
+  {
+    "artist": "Goo Goo Dolls",
+    "title": "Slide",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/googoodolls_ch0318_slide.m4a"
+  },
+  {
+    "artist": "Sublime",
+    "title": "What I Got",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/decades/sublime_sublime_02_whatigot.m4a"
+  },
+  {
+    "artist": "Right Said Fred",
+    "title": "I'm Too Sexy",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/rightsaidfred_up_01_imtoosexy.m4a"
+  },
     {
       "artist": "K-Ci & JoJo",
       "title": "All My Life",
