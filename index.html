@@ -92,8 +92,39 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:"MS Sans Serif",
 .status{padding:6px;background:#eaeaea;border-top:1px solid #999;font-size:13px;text-align:center;}
 .artist-area{display:flex;align-items:center;justify-content:space-between;padding:6px;gap:6px;background:#f2f2f2;border-top:1px solid #ddd;}
 .artist-area .left{font-size:13px;color:#222}
-.artist-area select{padding:4px;font-family:inherit}
+/* Forçar estilo consistente para os selects de playlist e artista */
+#playlistSelect,
+#artistSelect,
+.artist-area select {
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  padding: 4px 8px !important;
+  height: 28px !important;
+  min-width: 160px !important;
+  box-sizing: border-box !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-color: #f2f2f2 !important;
+  color: #000 !important;
+  border: 1px solid #333 !important;
+  border-radius: 2px !important;
+  padding-right: 34px !important; /* espaço para a seta personalizada */
+}
 
+/* Desenhar uma seta simples para substituir o native dropdown arrow */
+#playlistSelect,
+#artistSelect {
+  background-image:
+    linear-gradient(45deg, transparent 50%, #000 50%),
+    linear-gradient(135deg, #000 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 6px), calc(100% - 12px) calc(50% - 6px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* Garantir que selects não encolham em layouts diferentes */
+#playlistSelect, #artistSelect { width: auto; max-width: 100%; }
 /* Playlist — no covers here, only names. Fixed line height/height */
 .playlist-wrap{position:relative}
 .playlist{
@@ -530,6 +561,35 @@ function escapeHtml(s){
   }
   await loadPlaylist(playlistUrl);
 })();
+  
+  function normalizeSelectWidths() {
+  const p = document.getElementById('playlistSelect');
+  const a = document.getElementById('artistSelect');
+  if (!p || !a) return;
+
+  // Força repaint e lê largura real
+  const pRect = p.getBoundingClientRect();
+  const aRect = a.getBoundingClientRect();
+  const desired = Math.max(pRect.width, aRect.width, 160); // 160px mínimo
+
+  // Aplicar largura fixa em px para os dois (evita diferenças entre temas)
+  p.style.width = desired + 'px';
+  a.style.width = desired + 'px';
+}
+
+// Chamar ao carregar a página, redimensionar e sempre que a lista/tema mudar
+window.addEventListener('load', normalizeSelectWidths);
+window.addEventListener('resize', normalizeSelectWidths);
+
+// chamar também sempre que você atualizar/gerar as opções do select de artistas
+// por exemplo, adicione ao final de populateArtistFilter():
+// normalizeSelectWidths();
+
+// se você altera playlistSelect dinamicamente, adicione:
+playlistSelect && playlistSelect.addEventListener('change', () => {
+  // aguardar um frame caso opções sejam adicionadas dinamicamente
+  requestAnimationFrame(normalizeSelectWidths);
+});
 </script>
 </body>
 </html>
