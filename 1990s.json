@@ -1,5 +1,70 @@
 [
   {
+    "artist": "Fatboy Slim",
+    "title": "Praise You",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/fatboyslim_al312_praiseyou.m4a"
+  },
+  {
+    "artist": "Collective Soul",
+    "title": "Shine",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/collectivesoul_ch039_shine.m4a"
+  },
+  {
+    "artist": "Eric Clapton",
+    "title": "Layla (Unplugged)",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/claptoneric_chrgold05_laylaunplugged.m4a"
+  },
+  {
+    "artist": "Patty Smyth",
+    "title": "Sometimes Love Just Ain't Enough",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/smythpatty_chrgold46_sometimeslovejust.m4a"
+  },
+  {
+    "artist": "Sophie B. Hawkins",
+    "title": "Damn I Wish I Was Your Lover",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/hawkinssophieb_ch0351_damniwishiwasyour.m4a"
+  },
+  {
+    "artist": "Collective Soul",
+    "title": "December",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/collectivesoul_al0365_9501-04decemberedit.m4a"
+  },
+  {
+    "artist": "The Notorious B.I.G.",
+    "title": "Mo Money Mo Problems",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/notoriousbig_ch0324_momoneymoproblems.m4a"
+  },
+  {
+    "artist": "Enigma",
+    "title": "Return to Innocence",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/decades/enigma_thecrossofchanges_03_returntoinnocence.m4a"
+  },
+  {
+    "artist": "Mariah Carey",
+    "title": "Emotions",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/careymariah_chrgold42_emotions.m4a"
+  },
+  {
+    "artist": "Snow",
+    "title": "Informer",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/snow_ch037_informer.m4a"
+  },
+  {
+    "artist": "Will Smith",
+    "title": "Miami",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/smithwill_ch0318_miami.m4a"
+  },
+  {
+    "artist": "The Rembrandts",
+    "title": "I'll Be There for You",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/rembrandtsthe_chrgold45_illbethereforyou.m4a"
+  },
+  {
+    "artist": "Guns N' Roses",
+    "title": "Live and Let Die",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/classicrock/gunsnroses_crgold006_liveandletdie.m4a"
+  },
+  {
     "artist": "Madonna",
     "title": "Justify My Love",
     "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/madonna_celebration_17_justifymylove.m4a"
@@ -266,7 +331,7 @@
     },
     {
       "artist": "Nelson",
-      "title": "(Can't Live Without Your) Love and Affection",
+      "title": "Love and Affection",
       "url": "https://d1qg6pckcqcdk0.cloudfront.net/decades/nelson_aftertherain_01_cantlivewithoutyourloveandaffection.m4a"
     },
     {
