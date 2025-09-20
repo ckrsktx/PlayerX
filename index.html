@@ -167,7 +167,11 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:"MS Sans Serif",
   .lyrics{height:180px}
   .display .cover{width:44px;height:44px}
 }
-
+.header .autor {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
 /* Desktop performance hint: reduce repaints */
 *{backface-visibility:hidden}
 </style>
@@ -176,10 +180,14 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:"MS Sans Serif",
 <div class="app">
   <div class="shell" role="application" aria-label="Retro Player">
     <div class="header">
-      <div>Retro Player</div>
+      <div>
+        Retro Player
+        <div class="autor">por Márcio Rocha</div>
+      </div>
+      
       <div>
         <select id="playlistSelect" title="Escolha a playlist" style="padding:4px;font-family:inherit">
-          <option value="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json">Alternative Now</option>
+          <option value="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json">Alternative</option>
           <option value="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/1990s.json">1990s</option>
         </select>
       </div>
@@ -481,18 +489,29 @@ audio.addEventListener('ended', () => {
 
 /* MediaSession (lock screen controls) */
 function setMediaSession(track){
-  if('mediaSession' in navigator){
-    let artwork = [];
-    const bg = coverEl.style.backgroundImage;
-    if(bg && bg.startsWith('url(')){
-      const url = bg.slice(5,-2);
-      artwork.push({src:url, sizes:'96x96', type:'image/png'});
-    }
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: track.title,
-      artist: track.artist,
-      artwork
-    });
+  if ("mediaSession" in navigator) {
+  navigator.mediaSession.setActionHandler('play', () => {
+  audio.play();
+  isPlaying = true;
+  playBtn.textContent = "⏸"; // mantém botão em pausa visível
+  setMediaSession();
+});
+
+navigator.mediaSession.setActionHandler('pause', () => {
+  audio.pause();
+  isPlaying = false;
+  playBtn.textContent = "▶"; // volta para play
+  setMediaSession();
+});
+
+navigator.mediaSession.setActionHandler('previoustrack', () => {
+  prevBtn.click();
+});
+
+navigator.mediaSession.setActionHandler('nexttrack', () => {
+  nextBtn.click();
+});
+
     navigator.mediaSession.setActionHandler('play', ()=> play());
     navigator.mediaSession.setActionHandler('pause', ()=> pause());
     navigator.mediaSession.setActionHandler('previoustrack', ()=> prevBtn.click());
@@ -507,7 +526,7 @@ async function fetchCover(title, artist){
   if(cached){ coverEl.style.backgroundImage = `url(${cached})`; return; }
   try{
     const q = encodeURIComponent(artist + ' ' + title);
-    const res = await fetch(`https://itunes.apple.com/search?term=${q}&entity=song&limit=1`);
+    const res = await fetch(`685a04193652e98c9e5e598dc6d306ab`);
     const data = await res.json();
     if(data.results && data.results.length){
       const url = data.results[0].artworkUrl100;
