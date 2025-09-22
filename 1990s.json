@@ -1,5 +1,110 @@
 [
   {
+    "artist": "Aerosmith",
+    "title": "Livin' on the Edge",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/classicrock/aerosmith_crgold022_livinontheedge.m4a"
+  },
+  {
+    "artist": "Guns N' Roses",
+    "title": "November Rain",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/classicrock/gunsnroses_crgold025_novemberrainedit.m4a"
+  },
+  {
+    "artist": "Goo Goo Dolls",
+    "title": "Iris",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/googoodolls_chrgold53_iris.m4a"
+  },
+  {
+    "artist": "Madonna",
+    "title": "Take a Bow",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/madonna_chrgold19_takeabowedit.m4a"
+  },
+  {
+    "artist": "Michel'le feat. Pras",
+    "title": "Ghetto Superstar",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/michelpras_ch0325_ghettosuperstarth.m4a"
+  },
+  {
+    "artist": "Mariah Carey",
+    "title": "Someday",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/decades/careymariah_gd908_06someday.m4a"
+  },
+  {
+    "artist": "Blues Traveler",
+    "title": "Run-Around",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/bluestraveler_chrgold53_runaroundsingleve.m4a"
+  },
+  {
+    "artist": "Color Me Badd",
+    "title": "I Wanna Sex You Up",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/rb/colormebadd_cmb_06_iwannasexyouup.m4a"
+  },
+  {
+    "artist": "Puff Daddy",
+    "title": "I'll Be Missing You",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/puffdaddy_ch0313_illbemissingyou.m4a"
+  },
+  {
+    "artist": "2Pac",
+    "title": "California Love",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/2pac_ch0360_californialove.m4a"
+  },
+  {
+    "artist": "Brandy",
+    "title": "The Boy Is Mine",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/brandy_ch0316_theboyismine.m4a"
+  },
+  {
+    "artist": "U2",
+    "title": "Mysterious Ways",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/u2_al339_mysteriousways.m4a"
+  },
+  {
+    "artist": "Cher",
+    "title": "Believe",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/cher_chrgold04_believe.m4a"
+  },
+  {
+    "artist": "Spin Doctors",
+    "title": "Little Miss Can't Be Wrong",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/spindoctors_ch0348_littlemisscantbew.m4a"
+  },
+  {
+    "artist": "Collective Soul",
+    "title": "The World I Know",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/collectivesoul_ch0310_theworldiknow.m4a"
+  },
+  {
+    "artist": "Lou Bega",
+    "title": "Mambo No. 5",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/begalou_chrgold59_mambono5alittlebi.m4a"
+  },
+  {
+    "artist": "Extreme",
+    "title": "Hole Hearted",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/metal/extreme_extremeiipornog_04_holehearted.m4a"
+  },
+  {
+    "artist": "Boyz II Men",
+    "title": "End of the Road",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/adultcontemporary/boyziimen_chrgold45_endoftheroadpoped.m4a"
+  },
+  {
+    "artist": "Sheryl Crow",
+    "title": "Strong Enough",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/crowsheryl_ch039_strongenough.m4a"
+  },
+  {
+    "artist": "Sublime",
+    "title": "Santeria",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/sublime_al0361_795-03santeria.m4a"
+  },
+  {
+    "artist": "Marcy Playground",
+    "title": "Sex and Candy",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chrgold/marcyplayground_ch0319_sexandcandy.m4a"
+  },
+  {
     "artist": "Fatboy Slim",
     "title": "Praise You",
     "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/fatboyslim_al312_praiseyou.m4a"
