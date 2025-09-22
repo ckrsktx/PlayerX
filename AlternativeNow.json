@@ -1,5 +1,82 @@
 [
   {
+    "title": "On the Game",
+    "artist": "The Black Keys",
+    "album": "Ohio Players",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/blackkeysthe_ohioplayers_04_onthegame.m4a",
+    "duration": "3:42"
+  },
+  {
+    "title": "A Fragile Thing",
+    "artist": "The Cure",
+    "album": "Songs of a Lost World",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/indie2/curethe_songsofalostworld_03_afragilething.m4a",
+    "duration": "4:15"
+  },
+  {
+    "title": "Sexy to Someone",
+    "artist": "Clairo",
+    "album": "Charm",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/indie2/clairo_charm_02_sexytosomeone.m4a",
+    "duration": "3:28"
+  },
+  {
+    "title": "Arrow",
+    "artist": "The Head and the Heart",
+    "album": "Arrow Single",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/headandtheheartthe_arrowsingle_01_arrow.m4a",
+    "duration": "3:51"
+  },
+  {
+    "title": "Long Dark Night (Radio Edit)",
+    "artist": "Judah & the Lion",
+    "album": "The Process",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/judahandthelion_theprocess_16_longdarknightradioedit.m4a",
+    "duration": "3:33"
+  },
+  {
+    "title": "Calling After Me",
+    "artist": "Wallows",
+    "album": "Model",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/wallows_model_03_callingafterme.m4a",
+    "duration": "4:12"
+  },
+  {
+    "title": "Imminent Redemption",
+    "artist": "Jane's Addiction",
+    "album": "Imminent Redemption Single",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/janesaddiction_imminentredemptionsingle_04_imminentredemption.m4a",
+    "duration": "3:45"
+  },
+  {
+    "title": "Friendly Fire",
+    "artist": "Linkin Park",
+    "album": "Papercuts (Singles Collection 2000-2023)",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/linkinpark_papercutssinglescollection20002023_20_friendlyfire.m4a",
+    "duration": "4:03"
+  },
+  {
+    "title": "Sinner",
+    "artist": "The Last Dinner Party",
+    "album": "Prelude to Ecstasy",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/lastdinnerpartythe_preludetoecstasy_08_sinner.m4a",
+    "duration": "3:29"
+  },
+  {
+    "title": "Showbiz (Radio Edit)",
+    "artist": "Palaye Royale",
+    "album": "Death or Glory",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/modernrock/palayeroyale_deathorglory_07_showbizradioedit.m4a",
+    "duration": "3:31"
+  },
+  {
+    "title": "Home",
+    "artist": "Good Neighbours",
+    "album": "Home Single",
+    "url": "https://d1qg6pckcqcdk0.cloudfront.net/chr2/goodneighbours_homesingle_1_home.m4a",
+    "duration": "4:15"
+  },
+  {
     "title": "Plastic Boxes",
     "artist": "Highly Suspect",
     "url": "https://d1qg6pckcqcdk0.cloudfront.net/currentrock/highlysuspect_asabovesobelow_05_plasticboxes.m4a"
