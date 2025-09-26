@@ -1,12 +1,16 @@
 {
   "name": "Retro Player",
-  "short_name": "RetroPlayer",
-  "start_url": ".",
+  "short_name": "Retro",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#008080",
-  "theme_color": "#008080",
+  "background_color": "#000",
+  "theme_color": "#000",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
   ]
 }
