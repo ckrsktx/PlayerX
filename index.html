@@ -5,62 +5,40 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"/>
   <title>Retro Player</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/style.css"> <!-- External CSS for better organization -->
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<header id="top"></header>
-<main id="app-wrap">
-  <section id="cover-section">
-    <div id="cover-art-wrapper">
-      <img id="cover-art" src="https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg" alt="Album Cover"/>
-      <div id="vinyl-overlay" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-      </div>
+  <div id="top"></div>
+  <div id="wrap">
+    <div id="capaWrap">
+      <img id="capa" src="https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg"/>
+      <div id="disco"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#444" stroke-width="1" fill="none"/><circle cx="12" cy="12" r="3" stroke="#444" stroke-width="1" fill="none"/></svg></div>
     </div>
 
-    <div id="track-info">
-      <h2 id="track-title">--</h2>
-      <p id="track-artist">--</p>
-    </div>
-  </section>
-
-  <section id="controls-section">
-    <div id="player-controls">
-      <button class="control-btn" id="prev-btn" aria-label="Previous Track">
-        <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4v16"/></svg>
-      </button>
-      <button class="control-btn" id="play-pause-btn" aria-label="Play/Pause">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </button>
-      <button class="control-btn" id="next-btn" aria-label="Next Track">
-        <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16"/></svg>
-      </button>
-      <button class="control-btn" id="shuffle-btn" aria-label="Toggle Shuffle">
-        <svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3m0 13v5h-5M4 4l5 5"/></svg>
-      </button>
+    <div id="bar">
+      <div class="btn" id="prev"><svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4v16"/></svg></div>
+      <div class="btn" id="playBtn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="btn" id="next"><svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16"/></svg></div>
+      <div class="btn" id="shufBtn"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3m0 13v5h-5M4 4l5 5"/></svg></div>
     </div>
 
-    <div id="playlist-selector">
-      <span class="bubble" id="playlist-trigger">Escolha a playlist</span>
+    <div id="info">
+      <div id="tit">–</div>
+      <div id="art">–</div>
     </div>
-  </section>
 
-  <section id="playlist-view">
-    <ul id="playlist-list"></ul>
-  </section>
+    <div id="bubbles"><span class="bubble" id="pickTrigger">escolha a playlist</span></div>
+    <ul id="roleta"></ul>
 
-  <div id="update-section">
-    <button id="update-playlist-btn">Atualizar Playlist</button>
+    <div id="btnWrap">
+      <button id="atualizar">Atualizar Playlist</button>
+    </div>
   </div>
-</main>
 
-<footer>RETRO PLAYER</footer>
+  <footer>RETRO PLAYER</footer>
+  <div id="pickBox"><div id="pickContent"></div></div>
+  <audio id="a" preload="metadata"></audio>
 
-<div id="picker-modal" aria-modal="true" role="dialog" style="display: none;">
-  <div id="picker-content"></div>
-</div>
-<audio id="audio-player" preload="metadata"></audio>
-
-<script src="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/script.js"></script> <!-- External JavaScript -->
+  <script src="app.js"></script>
 </body>
 </html>
