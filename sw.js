@@ -1,4 +1,4 @@
-const CACHE = 'retro-v1';
+const CACHE = 'retro-v2';
 const RAIZ = '/';
 
 self.addEventListener('install', e => {
