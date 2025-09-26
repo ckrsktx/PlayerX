@@ -1,614 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<meta name="theme-color" content="#008080">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Retro Player</title>
-<link rel="manifest" href="/manifest.json">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='100%25' height='100%25' fill='%23008080'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white'%3E♪%3C/text%3E%3C/svg%3E">
-<style>
-/* Windows-98-like font stack */
-:root{
-  --bg:#c0c0c0;
-  --panel:#111;
-  --accent:#0f0;
-  --muted:#777;
-  --primary:#000080;
-}
-html,body{height:100%;margin:0;background:var(--bg);font-family:"MS Sans Serif","Microsoft Sans Serif",Tahoma,Arial,sans-serif;-webkit-font-smoothing:auto;}
-/* App container centered on desktop; full-screen on mobile */
-.app{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  box-sizing:border-box;
-}
-.shell{
-  width:360px;
-  background:#e9e9e9;
-  border:2px solid #000;
-  box-shadow: 4px 4px 0 #808080;
-  display:flex;
-  flex-direction:column;
-  max-height:96vh;
-}
-
-/* Header */
-.header{
-  background:var(--primary);
-  color:#fff;
-  padding:6px 8px;
-  font-weight:bold;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  font-size:14px;
-}
-
-/* Display area */
-.display{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  background:#000;
-  color:var(--accent);
-  padding:8px;
-  font-family:monospace;
-  min-height:64px;
-}
-.display .cover{
-  width:48px;height:48px;border:1px solid #333;background:#111 center/cover no-repeat;flex-shrink:0;border-radius:3px;
-}
-.display .meta{overflow:hidden;display:flex;flex-direction:column;gap:2px;}
-.display .meta .title {
-  font-size:16px;
-  font-weight:bold;
-  color:#fff;
-  overflow-wrap: break-word; /* quebra palavras longas */
-  white-space: normal;       /* permite múltiplas linhas */
-  word-break: break-word;    /* quebra linhas corretamente */
-  max-height: 36px;          /* limitar a 2 linhas, ajuste conforme necessário */
-}
-.display .meta .artist{font-size:13px;font-style:italic;color:#9ae;}
-.display .meta .year{font-size:11px;color:var(--muted)}
-
-/* Controls */
-.controls{display:flex;justify-content:space-around;padding:8px;background:#ddd;border-top:2px solid #808080;}
-.controls button{background:#e0e0e0;border:1px solid #000;padding:6px 10px;border-radius:3px;cursor:pointer;font-weight:bold;font-family:inherit;}
-.controls button:active{background:#cfcfcf}
-
-/* Progress */
-.progress-wrap{height:8px;background:#b7b7b7;border-top:1px solid #999;cursor:pointer}
-.progress-fill{height:100%;width:0%;background:var(--primary);transition:width 0.08s linear}
-
-/* Status then artist filter (moved below) */
-.status{padding:6px;background:#eaeaea;border-top:1px solid #999;font-size:13px;text-align:center;}
-.artist-area{display:flex;align-items:center;justify-content:space-between;padding:6px;gap:6px;background:#f2f2f2;border-top:1px solid #ddd;}
-.artist-area .left{font-size:13px;color:#222}
-/* Forçar estilo consistente para os selects de playlist e artista */
-#playlistSelect,
-#artistSelect,
-.artist-area select {
-  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Arial, sans-serif !important;
-  font-size: 14px !important;
-  line-height: 1 !important;
-  padding: 4px 8px !important;
-  height: 28px !important;
-  min-width: 160px !important;
-  box-sizing: border-box !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  background-color: #f2f2f2 !important;
-  color: #000 !important;
-  border: 1px solid #333 !important;
-  border-radius: 2px !important;
-  padding-right: 34px !important; /* espaço para a seta personalizada */
-}
-
-/* Desenhar uma seta simples para substituir o native dropdown arrow */
-#playlistSelect,
-#artistSelect {
-  background-image:
-    linear-gradient(45deg, transparent 50%, #000 50%),
-    linear-gradient(135deg, #000 50%, transparent 50%);
-  background-position: calc(100% - 18px) calc(50% - 6px), calc(100% - 12px) calc(50% - 6px);
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-}
-
-/* Garantir que selects não encolham em layouts diferentes */
-#playlistSelect, #artistSelect { width: auto; max-width: 100%; }
-/* Playlist — no covers here, only names. Fixed line height/height */
-.playlist-wrap{position:relative}
-.playlist{
-  list-style:none;
-  margin:0;
-  padding:0;
-  background:#111;
-  color:#fff;
-  height:220px;
-  overflow:auto;
-}
-.playlist li{
-  height:48px;
-  display:flex;
-  align-items:center;
-  padding:8px 10px;
-  border-bottom:1px solid #222;
-  box-sizing:border-box;
-  cursor:pointer;
-}
-.playlist li:hover{background:#222}
-.playlist li.active{background:#003366}
-.track-title{font-size:15px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-right:8px;}
-.track-artist{font-size:12px;font-style:italic;color:#aaa}
-
-/* Lyrics box */
-.lyrics{background:#0b0b0b;color:#0f0;padding:10px;border:1px solid #000;margin-top:8px;height:160px;overflow:auto;white-space:pre-wrap;font-size:13px}
-.lyrics::-webkit-scrollbar{width:0}
-.lyrics{ -ms-overflow-style:none; scrollbar-width:none; }
-
-/* Responsive behavior: mobile = full screen app default */
-@media (max-width:720px){
-  .shell{
-    width:100vw;
-    height:100vh;
-    border-radius:0;
-    max-height:100vh;
-  }
-  .playlist{height:calc(100vh - 64px - 48px - 8px - 48px - 160px - 80px); /* try to balance layout */ }
-  .lyrics{height:180px}
-  .display .cover{width:44px;height:44px}
-}
-.header .autor {
-  font-size: 12px;
-  opacity: 0.7;
-  margin-top: 2px;
-}
-/* Desktop performance hint: reduce repaints */
-*{backface-visibility:hidden}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"/>
+  <title>Retro Player</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css"> <!-- External CSS for better organization -->
 </head>
 <body>
-<div class="app">
-  <div class="shell" role="application" aria-label="Retro Player">
-    <div class="header">
-      <div>
-        Retro Player
-        <div class="autor">por Márcio Rocha</div>
-      </div>
-      
-      <div>
-        <select id="playlistSelect" title="Escolha a playlist" style="padding:4px;font-family:inherit">
-          <option value="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/AlternativeNow.json">Alternative</option>
-          <option value="https://raw.githubusercontent.com/ckrsktx/PlayerX/refs/heads/main/1990s.json">1990s</option>
-        </select>
+<header id="top"></header>
+<main id="app-wrap">
+  <section id="cover-section">
+    <div id="cover-art-wrapper">
+      <img id="cover-art" src="https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg" alt="Album Cover"/>
+      <div id="vinyl-overlay" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
     </div>
 
-    <div class="display" aria-live="polite">
-      <div class="cover" id="cover" aria-hidden="true"></div>
-      <div class="meta">
-        <div class="title" id="title">Carregando...</div>
-        <div class="artist" id="artist"></div>
-        <div class="year" id="year"></div>
-      </div>
+    <div id="track-info">
+      <h2 id="track-title">--</h2>
+      <p id="track-artist">--</p>
+    </div>
+  </section>
+
+  <section id="controls-section">
+    <div id="player-controls">
+      <button class="control-btn" id="prev-btn" aria-label="Previous Track">
+        <svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4v16"/></svg>
+      </button>
+      <button class="control-btn" id="play-pause-btn" aria-label="Play/Pause">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="control-btn" id="next-btn" aria-label="Next Track">
+        <svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16"/></svg>
+      </button>
+      <button class="control-btn" id="shuffle-btn" aria-label="Toggle Shuffle">
+        <svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3m0 13v5h-5M4 4l5 5"/></svg>
+      </button>
     </div>
 
-    <div class="controls" role="group" aria-label="Controles">
-      <button id="prev" title="Anterior">⏮</button>
-      <button id="play" title="Play/Pause">▶</button>
-      <button id="next" title="Próximo">⏭</button>
-      <button id="shuffle" title="Shuffle">🔀</button>
+    <div id="playlist-selector">
+      <span class="bubble" id="playlist-trigger">Escolha a playlist</span>
     </div>
+  </section>
 
-    <div class="progress-wrap" id="progressWrap" aria-hidden="false">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
+  <section id="playlist-view">
+    <ul id="playlist-list"></ul>
+  </section>
 
-    <div class="status" id="status">Pronto</div>
-
-    <!-- Artist filter placed below status with spacing -->
-    <div class="artist-area" style="gap:8px;">
-      <div class="left">Filtrar por artista</div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <select id="artistSelect" title="Filtrar artista"><option value="__all__">Todos</option></select>
-        <button id="artistClear" title="Limpar filtro" style="padding:4px 8px;font-family:inherit">Limpar</button>
-      </div>
-    </div>
-
-    <div class="playlist-wrap">
-      <ul class="playlist" id="playlist" role="listbox" aria-label="Playlist"></ul>
-    </div>
-
-    <div class="lyrics" id="lyrics" aria-live="polite">Letra carregando...</div>
-    
+  <div id="update-section">
+    <button id="update-playlist-btn">Atualizar Playlist</button>
   </div>
+</main>
+
+<footer>RETRO PLAYER</footer>
+
+<div id="picker-modal" aria-modal="true" role="dialog" style="display: none;">
+  <div id="picker-content"></div>
 </div>
+<audio id="audio-player" preload="metadata"></audio>
 
-<script>
-/* -----------------------------
-   Retro Player — Full HTML JS
-   ----------------------------- */
-
-/* Elements */
-const playlistSelect = document.getElementById('playlistSelect');
-const playlistEl = document.getElementById('playlist');
-const titleEl = document.getElementById('title');
-const artistEl = document.getElementById('artist');
-const yearEl = document.getElementById('year');
-const coverEl = document.getElementById('cover');
-const playBtn = document.getElementById('play');
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-const shuffleBtn = document.getElementById('shuffle');
-const statusEl = document.getElementById('status');
-const progressFill = document.getElementById('progressFill');
-const progressWrap = document.getElementById('progressWrap');
-const artistSelect = document.getElementById('artistSelect');
-const artistClear = document.getElementById('artistClear');
-const lyricsEl = document.getElementById('lyrics');
-
-let playlistUrl = localStorage.getItem('selectedPlaylistUrl') || playlistSelect.value;
-let playlistData = [], filteredData = [], current = 0;
-let audio = new Audio();
-let playing = false;
-let shuffle = false;
-
-/* small helpers */
-const setStatus = (t, ms=2000) => { statusEl.textContent = t; if(ms) setTimeout(()=>{ if(statusEl.textContent === t) statusEl.textContent='Pronto'; }, ms); };
-const safeKey = (a,b) => `rp_${(a||'').replace(/\s+/g,'_')}_${(b||'').replace(/\s+/g,'_')}`;
-
-/* Register service worker and request ready */
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/sw.js').then(reg=>{
-    console.log('SW registrado', reg);
-  }).catch(err=>console.warn('SW falha',err));
-}
-
-/* Playlist selection (including custom URL) */
-playlistSelect.addEventListener('change', async (e)=>{
-  const v = e.target.value;
-  if(v === '__custom__'){
-    const u = prompt('Cole a URL do JSON da playlist (array de {title,artist,url}):');
-    if(u && u.trim()){
-      try{
-        new URL(u);
-        playlistUrl = u.trim();
-        localStorage.setItem('selectedPlaylistUrl', playlistUrl);
-        // insert option if not present
-        if(![...playlistSelect.options].some(o=>o.value===playlistUrl)){
-          const opt=document.createElement('option');opt.value=playlistUrl;opt.textContent='Playlist custom'; playlistSelect.add(opt, playlistSelect.options[playlistSelect.options.length-1]);
-        }
-        playlistSelect.value = playlistUrl;
-        await loadPlaylist(playlistUrl);
-      }catch(err){
-        alert('URL inválida');
-        playlistSelect.value = localStorage.getItem('selectedPlaylistUrl') || playlistSelect.options[0].value;
-      }
-    } else {
-      // revert
-      playlistSelect.value = localStorage.getItem('selectedPlaylistUrl') || playlistSelect.options[0].value;
-    }
-  } else {
-    playlistUrl = v;
-    localStorage.setItem('selectedPlaylistUrl', playlistUrl);
-    await loadPlaylist(playlistUrl);
-  }
-});
-// Load playlist JSON
-async function loadPlaylist(url){
-  setStatus('Carregando playlist...');
-  try{
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const json = await res.json();
-    if(!Array.isArray(json)) throw new Error('Formato inválido (esperado array)');
-
-    // Normalizar campos
-    playlistData = json.map(t=>{
-      return { 
-        title: String(t.title||'Untitled'), 
-        artist: String(t.artist||'Unknown'), 
-        url: String(t.url||'') 
-      };
-    });
-
-    // Ordenar por título (opcional)
-    playlistData.sort((a,b)=> a.title.localeCompare(b.title));
-
-    // Inicializa playlist filtrada
-    filteredData = playlistData.slice();
-
-    // Renderiza artistas e playlist
-    populateArtistFilter?.(); // se existir
-    renderPlaylist();
-
-    // Reseta track para a primeira faixa
-    current = 0;
-    loadTrack(current);
-
-    // Reset botão play
-    playing = false;
-    playBtn.textContent = '▶';
-
-    highlightCurrent();
-    setStatus('Playlist carregada');
-  }catch(err){
-    console.error(err);
-    setStatus('Erro ao carregar playlist', 4000);
-    alert('Erro ao carregar playlist: ' + (err.message||err));
-  }
-}
-  
-
-/* Populate artist filter select */
-function populateArtistFilter(){
-  const artists = Array.from(new Set(playlistData.map(p=>p.artist))).sort();
-  artistSelect.innerHTML = '<option value="__all__">Todos</option>';
-  artists.forEach(a=>{
-    const opt=document.createElement('option'); opt.value=a; opt.textContent=a;
-    artistSelect.appendChild(opt);
-  });
-}
-
-/* Filter by artist */
-artistSelect.addEventListener('change', ()=>{
-  const artist = artistSelect.value;
-  
-  if(artist === '__all__'){
-    // Volta para toda a playlist
-    filteredData = playlistData.slice();
-  } else {
-    filteredData = playlistData.filter(t => t.artist === artist);
-  }
-
-  renderPlaylist();
-
-  // Resetar track e botão
-  current = 0;
-  loadTrack(current);
-  playing = false;
-  playBtn.textContent = '▶';
-
-  highlightCurrent();
-});
-artistClear.addEventListener('click', ()=>{
-  if(playlistData.length===0) return;
-  const currentTrack = filteredData[current]; // música atual antes de limpar
-  artistSelect.value = '__all__';
-  filteredData = playlistData.slice();
-  renderPlaylist();
-  
-  // tentar manter o índice da música atual
-  const idx = filteredData.findIndex(t => t.title === currentTrack.title && t.artist === currentTrack.artist);
-  if(idx !== -1) current = idx;
-  
-  highlightCurrent(); // só atualiza visual, não reinicia a música
-});
-
-/* Render playlist (use event delegation for performance) */
-function renderPlaylist(){
-  // use fragment
-  const frag = document.createDocumentFragment();
-  filteredData.forEach((t,i)=>{
-    const li = document.createElement('li');
-    li.setAttribute('role','option');
-    li.dataset.index = i;
-    li.innerHTML = `<div style="display:flex;flex-direction:column"><span class="track-title">${escapeHtml(t.title)}</span><span class="track-artist">${escapeHtml(t.artist)}</span></div>`;
-    frag.appendChild(li);
-  });
-  playlistEl.innerHTML = '';
-  playlistEl.appendChild(frag);
-  highlightCurrent();
-}
-
-/* Delegated click on playlist */
-playlistEl.addEventListener('click', (e)=>{
-  const li = e.target.closest('li');
-  if(!li) return;
-  const idx = Number(li.dataset.index);
-  if(Number.isFinite(idx)) { loadTrack(idx); play(); }
-});
-
-/* Load a track from filteredData by its index */
-async function loadTrack(idx){
-  if(idx < 0 || idx >= filteredData.length) return;
-  current = idx;
-  const track = filteredData[current];
-  // set src and display
-  audio.src = track.url;
-  titleEl.textContent = track.title;
-  artistEl.textContent = track.artist;
-  yearEl.textContent = '';
-  highlightCurrent();
-  // fetch cover (iTunes) and lyrics (lyrics.ovh) but do not block playback
-  fetchCover(track.title, track.artist);
-  fetchLyrics(track.title, track.artist);
-  setMediaSession(track);
-  document.title = `${track.title} - ${track.artist}`;
-}
-
-/* Highlight and scroll into view */
-function highlightCurrent(){
-  const children = playlistEl.children;
-  for(let i=0;i<children.length;i++){
-    children[i].classList.toggle('active', Number(children[i].dataset.index) === current);
-  }
-  const active = playlistEl.querySelector('li.active');
-  if(active) active.scrollIntoView({behavior:'smooth',block:'center'});
-}
-
-/* Playback controls */
-function play(){ audio.play().catch(()=>{}); playing=true; playBtn.textContent='⏸'; setStatus('Tocando'); }
-function pause(){ audio.pause(); playing=false; playBtn.textContent='▶'; setStatus('Pausado'); }
-
-playBtn.addEventListener('click', ()=> playing ? pause() : play());
-prevBtn.addEventListener('click', ()=> {
-  if(filteredData.length===0) return;
-  current = (current - 1 + filteredData.length) % filteredData.length;
-  loadTrack(current);
-  play();
-});
-nextBtn.addEventListener('click', ()=> {
-  if(filteredData.length===0) return;
-  if(shuffle) current = Math.floor(Math.random() * filteredData.length);
-  else current = (current + 1) % filteredData.length;
-  loadTrack(current);
-  play();
-});
-shuffleBtn.addEventListener('click', ()=> { shuffle = !shuffle; shuffleBtn.style.background = shuffle ? '#cfe' : ''; setStatus('Shuffle ' + (shuffle ? 'ON' : 'OFF')); });
-
-/* Progress handling (use bounding rect for accurate clicks) */
-progressWrap.addEventListener('click', (e) => {
-  if(!audio.duration) return;
-  const rect = progressWrap.getBoundingClientRect();
-  const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  audio.currentTime = pct * audio.duration;
-});
-audio.addEventListener('timeupdate', () => {
-  const pct = (audio.currentTime / (audio.duration || 1)) * 100;
-  progressFill.style.width = pct + '%';
-});
-
-/* When track ends -> next */
-audio.addEventListener('ended', () => {
-  if(filteredData.length===0) return;
-  if(shuffle) current = Math.floor(Math.random() * filteredData.length);
-  else current = (current + 1) % filteredData.length;
-  loadTrack(current);
-  play();
-});
-
-/* MediaSession (lock screen controls) */
-function setMediaSession(track){
-  if ("mediaSession" in navigator) {
-  navigator.mediaSession.setActionHandler('play', () => {
-  audio.play();
-  isPlaying = true;
-  playBtn.textContent = "⏸"; // mantém botão em pausa visível
-  setMediaSession();
-});
-
-navigator.mediaSession.setActionHandler('pause', () => {
-  audio.pause();
-  isPlaying = false;
-  playBtn.textContent = "▶"; // volta para play
-  setMediaSession();
-});
-
-navigator.mediaSession.setActionHandler('previoustrack', () => {
-  prevBtn.click();
-});
-
-navigator.mediaSession.setActionHandler('nexttrack', () => {
-  nextBtn.click();
-});
-
-    navigator.mediaSession.setActionHandler('play', ()=> play());
-    navigator.mediaSession.setActionHandler('pause', ()=> pause());
-    navigator.mediaSession.setActionHandler('previoustrack', ()=> prevBtn.click());
-    navigator.mediaSession.setActionHandler('nexttrack', ()=> nextBtn.click());
-  }
-}
-
-/* Fetch cover from iTunes (cache URL string in localStorage) */
-async function fetchCover(title, artist){
-  const key = safeKey('cover', artist + '_' + title);
-  const cached = localStorage.getItem(key);
-  if(cached){ coverEl.style.backgroundImage = `url(${cached})`; return; }
-  try{
-    const q = encodeURIComponent(artist + ' ' + title);
-    const res = await fetch(`685a04193652e98c9e5e598dc6d306ab`);
-    const data = await res.json();
-    if(data.results && data.results.length){
-      const url = data.results[0].artworkUrl100;
-      coverEl.style.backgroundImage = `url(${url})`;
-      yearEl.textContent = data.results[0].releaseDate ? new Date(data.results[0].releaseDate).getFullYear() : '';
-      localStorage.setItem(key, url);
-    } else {
-      coverEl.style.backgroundImage = `url('https://upload.wikimedia.org/wikipedia/commons/8/84/Music_icon.png')`;
-      yearEl.textContent = '';
-    }
-  }catch(e){
-    coverEl.style.backgroundImage = `url('https://upload.wikimedia.org/wikipedia/commons/8/84/Music_icon.png')`;
-    yearEl.textContent = '';
-  }
-}
-
-/* Lyrics via lyrics.ovh with cache */
-async function fetchLyrics(title, artist){
-  const key = safeKey('lyrics', artist + '_' + title);
-  const cached = localStorage.getItem(key);
-  if(cached !== null && cached !== undefined && cached !== ''){ lyricsEl.textContent = cached; return; }
-  lyricsEl.textContent = 'Carregando letra...';
-  try{
-    const res = await fetch(`https://api.lyrics.ovh/v1/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`);
-    const data = await res.json();
-    if(data && data.lyrics){
-      lyricsEl.textContent = data.lyrics;
-      localStorage.setItem(key, data.lyrics);
-    } else {
-      lyricsEl.textContent = 'Letra não disponível.';
-      localStorage.setItem(key, '');
-    }
-  }catch(e){
-    lyricsEl.textContent = 'Erro ao carregar letra.';
-  }
-}
-
-/* Utility to escape HTML */
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-/* Initial load: playlist saved or default */
-(async function init(){
-  const saved = localStorage.getItem('selectedPlaylistUrl');
-  if(saved){ playlistUrl = saved; // ensure select reflects
-    if(![...playlistSelect.options].some(o=>o.value===playlistUrl)){
-      const opt=document.createElement('option'); opt.value=playlistUrl; opt.textContent='Playlist selecionada'; playlistSelect.add(opt, playlistSelect.options[playlistSelect.options.length-1]);
-    }
-    playlistSelect.value = playlistUrl;
-  }
-  await loadPlaylist(playlistUrl);
-})();
-  
-  function normalizeSelectWidths() {
-  const p = document.getElementById('playlistSelect');
-  const a = document.getElementById('artistSelect');
-  if (!p || !a) return;
-
-  // Força repaint e lê largura real
-  const pRect = p.getBoundingClientRect();
-  const aRect = a.getBoundingClientRect();
-  const desired = Math.max(pRect.width, aRect.width, 160); // 160px mínimo
-
-  // Aplicar largura fixa em px para os dois (evita diferenças entre temas)
-  p.style.width = desired + 'px';
-  a.style.width = desired + 'px';
-}
-
-// Chamar ao carregar a página, redimensionar e sempre que a lista/tema mudar
-window.addEventListener('load', normalizeSelectWidths);
-window.addEventListener('resize', normalizeSelectWidths);
-
-// chamar também sempre que você atualizar/gerar as opções do select de artistas
-// por exemplo, adicione ao final de populateArtistFilter():
-// normalizeSelectWidths();
-
-// se você altera playlistSelect dinamicamente, adicione:
-playlistSelect && playlistSelect.addEventListener('change', () => {
-  // aguardar um frame caso opções sejam adicionadas dinamicamente
-  requestAnimationFrame(normalizeSelectWidths);
-});
-</script>
+<script src="script.js"></script> <!-- External JavaScript -->
 </body>
 </html>
