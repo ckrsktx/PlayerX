@@ -1,4 +1,4 @@
-const CACHE = 'retro-v1';
+const CACHE = 'retro-v2';
 const ESSENCIAL = ['./', './index.html', './app.css', './app.js', './manifest.json'];
 
 self.addEventListener('install', e => {
