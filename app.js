@@ -1,15 +1,19 @@
 const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/refs/heads/main/playlists.json';
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
-const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
+const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), btnEscolher = $('#btnEscolher'), home = $('#home'), player = $('#player');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, swInstalled = false;
 
-// >>> Primeira tela: só capa e botão <<<
+// Limpa cache antigo (evita erro ao atualizar)
+if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
+}
+
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  bar.classList.add('disabled');
-  tit.textContent = '–'; art.textContent = '–'; a.src = '';
+  // Apenas capa e botão visíveis
+  btnEscolher.onclick = abrirPlayer;
 })();
 
 async function loadPlaylistsMeta() {
@@ -31,6 +35,13 @@ function getPalette(img) {
 }
 function fitText(el, max = 28) {
   el.style.fontSize = el.textContent.length > max ? '.95rem' : '1.1rem';
+}
+
+function abrirPlayer() {
+  home.style.display = 'none';
+  player.style.display = 'flex';
+  installSW(); // ativa SW só agora
+  loadPl();    // carrega playlist
 }
 
 async function loadTrack() {
@@ -103,7 +114,6 @@ function markOnly() {
 function updateSession() {
   const t = q[idx];
   if (!t) return;
-  // Atualiza tempo na barra de status
   navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
@@ -149,11 +159,12 @@ function installSW() {
   navigator.serviceWorker.register('sw.js').then(() => swInstalled = true);
 }
 
-// ===== TROCA DE PLAYLIST: LIMPA TUDO + RESET SHUFFLE VISUAL =====
+// ===== TROCA DE PLAYLIST: LIMPA TUDO + RESET SHUFFLE =====
 async function loadPl() {
   q = []; rendered = 0; played = []; idx = 0;
   roleta.innerHTML = '';
-  tit.textContent = '–'; art.textContent = '–'; a.src = '';
+  tit.textContent = '–'; art.textContent = '–';
+  a.src = '';
 
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
@@ -164,6 +175,13 @@ async function loadPl() {
     return;
   }
 
+  // RESETA SHUFFLE
+  shuf = false;
+  shufBtn.classList.remove('on');
+  shufBtn.style.background = '';
+  shufBtn.style.color = '';
+  shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
+
   played = []; idx = shuf ? shufflePool() : 0;
   rendered = 0;
   renderPartial();
@@ -171,13 +189,6 @@ async function loadPl() {
   a.pause();
   updateIcon();
   pickTrigger.textContent = `Playlist - ${currentPl}`;
-  bar.classList.remove('disabled');
-
-  // Reseta visual do shuffle
-  shufBtn.classList.remove('on');
-  shufBtn.style.background = '';
-  shufBtn.style.color = '';
-  shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
 }
 
 function renderPartial(qtd = 50) {
