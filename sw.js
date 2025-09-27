@@ -1,49 +1,22 @@
-const CACHE = 'retro-v3';
-const RAIZ = '/';
+const CACHE = 'retro-v1';
+const ESSENCIAL = ['./', './index.html', './app.css', './app.js', './manifest.json'];
 
 self.addEventListener('install', e => {
-  // Apaga tudo já na instalação
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.map(k => caches.delete(k)))
-    ).then(() =>
-      caches.open(CACHE).then(c => c.addAll([
-        RAIZ,
-        RAIZ + 'index.html',
-        RAIZ + 'app.css',
-        RAIZ + 'app.js',
-        RAIZ + 'manifest.json'
-      ]))
-    )
-  );
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ESSENCIAL)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
-  );
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
   self.clients.claim();
 });
 
-// Network first: busca online, se falhar usa cache
 self.addEventListener('fetch', e => {
+  // MP3 / M4A = streaming, não cacheia
+  if (e.request.url.match(/\.(mp3|m4a|ogg)(\?.*)?$/i)) return;
   if (e.request.mode === 'navigate') {
-    e.respondWith(
-      fetch(e.request).catch(() => caches.match(RAIZ + 'index.html'))
-    );
+    e.respondWith(caches.match('./index.html'));
     return;
   }
-
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return res;
-      })
-      .catch(() => caches.match(e.request))
-  );
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
 });
