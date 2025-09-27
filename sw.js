@@ -1,19 +1,21 @@
-const CACHE = 'retro-v2';
+const CACHE = 'retro-v1';
 const ESSENCIAL = ['./', './index.html', './app.css', './app.js', './manifest.json'];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ESSENCIAL)));
-  self.skipWaiting();
-});
-
+// Limpa lixo de SW antigo ao ativar
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))));
   self.clients.claim();
 });
 
+// Só cacheia ESSENCIAL quando usuário ESCOLHER playlist
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ESSENCIAL)));
+  self.skipWaiting();
+});
+
+// Áudio = streaming, não ocupa espaço
 self.addEventListener('fetch', e => {
-  // MP3 / M4A = streaming, não cacheia
-  if (e.request.url.match(/\.(mp3|m4a|ogg)(\?.*)?$/i)) return;
+  if (e.request.url.match(/\.(mp3|m4a|ogg)(\?.*)?$/i)) return;   // deixa passar
   if (e.request.mode === 'navigate') {
     e.respondWith(caches.match('./index.html'));
     return;
