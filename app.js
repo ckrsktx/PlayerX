@@ -4,6 +4,11 @@ const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, swInstalled = false;
 
+// Limpa cache antigo AO ABRIR (evita "página não encontrada")
+if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
+}
+
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
@@ -55,7 +60,7 @@ async function loadTrack() {
     disco.style.opacity = 0;
     capa.onload = () => requestIdleCallback(() => setAccent(getPalette(capa)));
   } else {
-    capa.src = 'https://i.ibb.co/DfN4fXFV/reprodutor-de-musica-1.png';
+    capa.src = 'https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg';
     disco.style.opacity = 0;
     setAccent('#00ffff');
   }
@@ -79,7 +84,6 @@ next.onclick = () => skip(1);
 shufBtn.onclick = () => {
   shuf = !shuf;
   shufBtn.classList.toggle('on', shuf);
-  // fundo branco / texto preto quando ativo
   if (shuf) {
     shufBtn.style.background = '#fff';
     shufBtn.style.color = '#000';
@@ -92,7 +96,9 @@ shufBtn.onclick = () => {
 function skip(d) { idx = (idx + d + q.length) % q.length; loadTrack(); play(); }
 
 function centerTrack() { const li = roleta.children[idx]; if (li) li.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-function markOnly() { document.querySelectorAll('li').forEach((li, i) => li.classList.toggle('on', i === idx)); }
+function markOnly() {
+  document.querySelectorAll('li').forEach((li, i) => li.classList.toggle('on', i === idx));
+}
 
 function updateSession() {
   const t = q[idx];
@@ -100,7 +106,7 @@ function updateSession() {
   navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
-    artwork: [{ src: capa.src || 'https://i.ibb.co/DfN4fXFV/reprodutor-de-musica-1.png', sizes: '512x512', type: 'image/jpeg' }]
+    artwork: [{ src: capa.src || 'https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg', sizes: '512x512', type: 'image/jpeg' }]
   });
   navigator.mediaSession.setActionHandler('play', play);
   navigator.mediaSession.setActionHandler('pause', pause);
