@@ -2,11 +2,12 @@ const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/ref
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
-let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
+let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, swInstalled = false;
 
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
+  // NÃO ativa SW aqui
 })();
 
 async function loadPlaylistsMeta() {
@@ -41,7 +42,7 @@ async function loadTrack() {
   let img = '';
   try {
     const dz = await fetch(`https://api.deezer.com/search/track?q=${encodeURIComponent(t.artist + ' ' + t.title)}&limit=1`).then(r => r.json());
-    img = dz.data?.[0]?.album?.cover_small?.replace('56x56', '350x350') || ''; // leve
+    img = dz.data?.[0]?.album?.cover_small?.replace('56x56', '350x350') || '';
   } catch {}
   if (!img) {
     try {
@@ -106,6 +107,7 @@ function buildPickBox() {
       document.querySelectorAll('.bubble').forEach(x => x.classList.remove('on'));
       b.classList.add('on');
       currentPl = pl;
+      installSW();               // ← ativa SW só agora
       loadPl();
       pickBox.classList.remove('on');
     };
@@ -124,6 +126,11 @@ function shufflePool() {
   return pick;
 }
 
+function installSW() {
+  if (!('serviceWorker' in navigator) || swInstalled) return;
+  navigator.serviceWorker.register('sw.js').then(() => swInstalled = true);
+}
+
 async function loadPl() {
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   const res = await fetch(busted);
@@ -131,7 +138,7 @@ async function loadPl() {
   played = [];
   idx = shuf ? shufflePool() : 0;
   rendered = 0;
-  renderPartial();               // renderiza aos poucos
+  renderPartial();
   loadTrack();
   a.pause();
   updateIcon();
@@ -139,7 +146,7 @@ async function loadPl() {
   bar.classList.remove('disabled');
 }
 
-function renderPartial(qtd = CHUNK) {
+function renderPartial(qtd = 50) {
   const frag = document.createDocumentFragment();
   const end = Math.min(rendered + qtd, q.length);
   for (let i = rendered; i < end; i++) {
@@ -152,12 +159,9 @@ function renderPartial(qtd = CHUNK) {
   rendered = end;
   roleta.append(frag);
   markOnly();
-  // scroll infinito
   roleta.onscroll = () => {
     if (rendered >= q.length) return;
-    if (roleta.scrollTop + roleta.clientHeight >= roleta.scrollHeight - 40) {
-      renderPartial(CHUNK);
-    }
+    if (roleta.scrollTop + roleta.clientHeight >= roleta.scrollHeight - 40) renderPartial(50);
   };
 }
 
@@ -169,7 +173,7 @@ a.onended = () => {
 
 $('#atualizar').onclick = async () => {
   await loadPlaylistsMeta();
-  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+  if (navigator.serviceWorker.controller) {
     await caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
     navigator.serviceWorker.controller.postMessage({ cmd: 'SKIP_WAITING' });
   }
@@ -184,7 +188,3 @@ $('#atualizar').onclick = async () => {
     alert('Erro ao buscar nova versão.');
   }
 };
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
