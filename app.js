@@ -87,9 +87,11 @@ shufBtn.onclick = () => {
   if (shuf) {
     shufBtn.style.background = '#fff';
     shufBtn.style.color = '#000';
+    shufBtn.querySelector('svg').style.stroke = '#000';
   } else {
     shufBtn.style.background = '';
     shufBtn.style.color = '';
+    shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
   }
   loadPl();
 };
@@ -103,10 +105,11 @@ function markOnly() {
 function updateSession() {
   const t = q[idx];
   if (!t) return;
+  // Atualiza tempo na barra de status
   navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
-    artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/jpeg' }]
+    artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/png' }]
   });
   navigator.mediaSession.setActionHandler('play', play);
   navigator.mediaSession.setActionHandler('pause', pause);
@@ -148,15 +151,13 @@ function installSW() {
   navigator.serviceWorker.register('sw.js').then(() => swInstalled = true);
 }
 
-// ===== TROCA DE PLAYLIST: LIMPA TUDO + LOADING =====
 async function loadPl() {
-  // Limpa lista antiga
+  // Limpa tudo antes de trocar
   q = []; rendered = 0; played = []; idx = 0;
   roleta.innerHTML = '';
   tit.textContent = '–'; art.textContent = '–';
   a.src = '';
 
-  // Busca NOVA playlist (com cache-bust)
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
     const res = await fetch(busted);
