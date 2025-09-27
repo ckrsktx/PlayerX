@@ -7,56 +7,38 @@
   <link rel="manifest" href="manifest.json">
   <link rel="preload" href="app.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="app.css"></noscript>
-  <style>
-    /* TELA INICIAL LIMPA */
-    #home{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center}
-    #home img{width:min(45vw,9rem);aspect-ratio:1;object-fit:cover;margin-bottom:1.5rem}
-    /* Botão igual às bolhas de playlist */
-    #btnEscolher{padding:.25rem .6rem;border:1px solid var(--accent);border-radius:2rem;font-size:.7rem;cursor:pointer;transition:background .2s;white-space:nowrap;color:var(--accent);background:transparent}
-    #btnEscolher:hover{background:var(--accent);color:var(--bg)}
-    #player{display:none}
-  </style>
 </head>
 <body>
 <div id="top"></div>
-
-<!-- TELA INICIAL -->
-<div id="home">
-  <img id="capaHome" src="https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png" alt="Capa"/>
-  <button id="btnEscolher" class="bubble">Escolher Playlist</button>
-</div>
-
-<!-- PLAYER COMPLETO (escondido) -->
-<div id="player">
-  <div id="wrap">
-    <div id="capaWrap">
-      <img id="capa" src="https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png"/>
-      <div id="disco"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#444" stroke-width="1" fill="none"/><circle cx="12" cy="12" r="3" stroke="#444" stroke-width="1" fill="none"/></svg></div>
-    </div>
-
-    <div id="bar" class="disabled">
-      <div class="btn" id="prev"><svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4v16"/></svg></div>
-      <div class="btn" id="playBtn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-      <div class="btn" id="next"><svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16"/></svg></div>
-      <div class="btn" id="shufBtn"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3m0 13v5h-5M4 4l5 5"/></svg></div>
-    </div>
-
-    <div id="info">
-      <div id="tit">–</div>
-      <div id="art">–</div>
-    </div>
-
-    <div id="bubbles"><span class="bubble on" id="pickTrigger">Playlist</span></div>
-    <ul id="roleta"></ul>
-
-    <div id="btnWrap">
-      <button id="atualizar">Atualizar Playlist</button>
-    </div>
+<div id="wrap">
+  <div id="capaWrap">
+    <img id="capa" src="https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png" alt="Capa"/>
+    <div id="disco"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#444" stroke-width="1" fill="none"/><circle cx="12" cy="12" r="3" stroke="#444" stroke-width="1" fill="none"/></svg></div>
   </div>
-  <footer>RETRO PLAYER</footer>
-  <div id="pickBox"><div id="pickContent"></div></div>
-  <audio id="a" preload="metadata"></audio>
+
+  <div id="bar" class="disabled">
+    <div class="btn" id="prev"><svg viewBox="0 0 24 24"><path d="M19 20L9 12l10-8v16zM5 4v16"/></svg></div>
+    <div class="btn" id="playBtn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    <div class="btn" id="next"><svg viewBox="0 0 24 24"><path d="M5 4l10 8-10 8V4zm14 0v16"/></svg></div>
+    <div class="btn" id="shufBtn"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3m0 13v5h-5M4 4l5 5"/></svg></div>
+  </div>
+
+  <div id="info">
+    <div id="tit">–</div>
+    <div id="art">–</div>
+  </div>
+
+  <div id="bubbles"><span class="bubble on" id="pickTrigger">Playlist</span></div>
+  <ul id="roleta"></ul>
+
+  <div id="btnWrap">
+    <button id="atualizar">Atualizar Playlist</button>
+  </div>
 </div>
+
+<footer>RETRO PLAYER</footer>
+<div id="pickBox"><div id="pickContent"></div></div>
+<audio id="a" preload="metadata"></audio>
 
 <script src="app.js"></script>
 </body>
