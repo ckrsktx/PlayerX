@@ -1,19 +1,25 @@
 const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/refs/heads/main/playlists.json';
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
-const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), btnEscolher = $('#btnEscolher'), home = $('#home'), player = $('#player');
-let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, swInstalled = false;
+const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickContent'), bar = $('#bar');
+let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
 
 // Limpa cache antigo (evita erro ao atualizar)
-if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+if ('serviceWorker' in navigator) {
   caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
+  navigator.serviceWorker.register('sw.js'); // só para tela apagada
 }
 
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // Apenas capa e botão visíveis
-  btnEscolher.onclick = abrirPlayer;
+  // Abre PRIMEIRA playlist automaticamente
+  const primeira = Object.keys(PLAYLISTS)[0];
+  if (primeira) {
+    currentPl = primeira;
+    pickTrigger.textContent = `Playlist - ${primeira}`;
+    loadPl();
+  }
 })();
 
 async function loadPlaylistsMeta() {
@@ -37,13 +43,7 @@ function fitText(el, max = 28) {
   el.style.fontSize = el.textContent.length > max ? '.95rem' : '1.1rem';
 }
 
-function abrirPlayer() {
-  home.style.display = 'none';
-  player.style.display = 'flex';
-  installSW(); // ativa SW só agora
-  loadPl();    // carrega playlist
-}
-
+// Música e capa só carregam quando EXECUTADA
 async function loadTrack() {
   const t = q[idx];
   a.src = t.url;
@@ -135,7 +135,6 @@ function buildPickBox() {
       document.querySelectorAll('.bubble').forEach(x => x.classList.remove('on'));
       b.classList.add('on');
       currentPl = pl;
-      installSW();
       loadPl();
       pickBox.classList.remove('on');
     };
@@ -154,18 +153,8 @@ function shufflePool() {
   return pick;
 }
 
-function installSW() {
-  if (!('serviceWorker' in navigator) || swInstalled) return;
-  navigator.serviceWorker.register('sw.js').then(() => swInstalled = true);
-}
-
-// ===== TROCA DE PLAYLIST: LIMPA TUDO + RESET SHUFFLE =====
+// ===== CARREGA PLAYLIST =====
 async function loadPl() {
-  q = []; rendered = 0; played = []; idx = 0;
-  roleta.innerHTML = '';
-  tit.textContent = '–'; art.textContent = '–';
-  a.src = '';
-
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
     const res = await fetch(busted);
@@ -174,14 +163,6 @@ async function loadPl() {
     alert('Erro ao carregar playlist.');
     return;
   }
-
-  // RESETA SHUFFLE
-  shuf = false;
-  shufBtn.classList.remove('on');
-  shufBtn.style.background = '';
-  shufBtn.style.color = '';
-  shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
-
   played = []; idx = shuf ? shufflePool() : 0;
   rendered = 0;
   renderPartial();
@@ -189,6 +170,7 @@ async function loadPl() {
   a.pause();
   updateIcon();
   pickTrigger.textContent = `Playlist - ${currentPl}`;
+  bar.classList.remove('disabled');
 }
 
 function renderPartial(qtd = 50) {
