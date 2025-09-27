@@ -60,7 +60,7 @@ async function loadTrack() {
     disco.style.opacity = 0;
     capa.onload = () => requestIdleCallback(() => setAccent(getPalette(capa)));
   } else {
-    capa.src = 'https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg';
+    capa.src = 'https://i.ibb.co/DfN4fXFV/reprodutor-de-musica-1.png';
     disco.style.opacity = 0;
     setAccent('#00ffff');
   }
@@ -106,7 +106,7 @@ function updateSession() {
   navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
-    artwork: [{ src: capa.src || 'https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg', sizes: '512x512', type: 'image/jpeg' }]
+    artwork: [{ src: capa.src || 'https://i.ibb.co/DfN4fXFV/reprodutor-de-musica-1.png', sizes: '512x512', type: 'image/jpeg' }]
   });
   navigator.mediaSession.setActionHandler('play', play);
   navigator.mediaSession.setActionHandler('pause', pause);
