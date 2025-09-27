@@ -1,8 +1,13 @@
 const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/refs/heads/main/playlists.json';
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
-const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent');
-let q = [], idx = 0, shuf = false, currentPl = 'Alternative', played = [];
+const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
+let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
+
+(async () => {
+  await loadPlaylistsMeta();
+  buildPickBox();
+})();
 
 async function loadPlaylistsMeta() {
   const res = await fetch(PLAYLIST_META + '?t=' + Date.now());
@@ -34,13 +39,10 @@ async function loadTrack() {
   fitText(tit);
 
   let img = '';
-  // 1º Deezer
   try {
     const dz = await fetch(`https://api.deezer.com/search/track?q=${encodeURIComponent(t.artist + ' ' + t.title)}&limit=1`).then(r => r.json());
-    img = dz.data?.[0]?.album?.cover_xl || '';
+    img = dz.data?.[0]?.album?.cover_small?.replace('56x56', '350x350') || ''; // leve
   } catch {}
-
-  // 2º iTunes
   if (!img) {
     try {
       const it = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(t.artist + ' ' + t.title)}&limit=1&entity=song`).then(r => r.json());
@@ -51,7 +53,7 @@ async function loadTrack() {
   if (img) {
     capa.src = img;
     disco.style.opacity = 0;
-    capa.onload = () => setAccent(getPalette(capa));
+    capa.onload = () => requestIdleCallback(() => setAccent(getPalette(capa)));
   } else {
     capa.src = 'https://i.ibb.co/VW1Hn4MF/Screenshot-2025-09-23-10-00-03-283-com-miui-gallery-edit.jpg';
     disco.style.opacity = 0;
@@ -124,25 +126,39 @@ function shufflePool() {
 
 async function loadPl() {
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
-  q = await (await fetch(busted)).json();
+  const res = await fetch(busted);
+  q = await res.json();
   played = [];
   idx = shuf ? shufflePool() : 0;
-  renderRoleta();
+  rendered = 0;
+  renderPartial();               // renderiza aos poucos
   loadTrack();
   a.pause();
   updateIcon();
   pickTrigger.textContent = `Playlist - ${currentPl}`;
+  bar.classList.remove('disabled');
 }
 
-function renderRoleta() {
-  roleta.innerHTML = '';
-  q.forEach((t, i) => {
+function renderPartial(qtd = CHUNK) {
+  const frag = document.createDocumentFragment();
+  const end = Math.min(rendered + qtd, q.length);
+  for (let i = rendered; i < end; i++) {
+    const t = q[i];
     const li = document.createElement('li');
-    li.innerHTML = `<span class="mus" style="color:#00ffff;font-size:1rem">${t.title}</span><span class="art" style="font-size:.8rem;font-style:italic">${t.artist}</span>`;
+    li.innerHTML = `<span class="mus">${t.title}</span><span class="art">${t.artist}</span>`;
     li.onclick = () => { idx = i; loadTrack(); play(); };
-    roleta.append(li);
-  });
-  markOnly(); centerTrack();
+    frag.append(li);
+  }
+  rendered = end;
+  roleta.append(frag);
+  markOnly();
+  // scroll infinito
+  roleta.onscroll = () => {
+    if (rendered >= q.length) return;
+    if (roleta.scrollTop + roleta.clientHeight >= roleta.scrollHeight - 40) {
+      renderPartial(CHUNK);
+    }
+  };
 }
 
 a.onended = () => {
@@ -163,16 +179,11 @@ $('#atualizar').onclick = async () => {
     q = await res.json();
     played = []; idx = 0;
     shuf = false; shufBtn.classList.remove('on');
-    renderRoleta(); loadTrack(); updateIcon();
+    renderPartial(); loadTrack(); updateIcon();
   } catch (e) {
     alert('Erro ao buscar nova versão.');
   }
 };
-
-(async () => {
-  await loadPlaylistsMeta();
-  loadPl();
-})();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
