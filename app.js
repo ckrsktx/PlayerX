@@ -7,17 +7,18 @@ let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CH
 // Limpa cache antigo (evita erro ao atualizar)
 if ('serviceWorker' in navigator) {
   caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
-  navigator.serviceWorker.register('sw.js'); // só para tela apagada
+  navigator.serviceWorker.register('sw.js');
 }
 
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // Abre PRIMEIRA playlist automaticamente
-  const primeira = Object.keys(PLAYLISTS)[0];
-  if (primeira) {
-    currentPl = primeira;
-    pickTrigger.textContent = `Playlist - ${primeira}`;
+  // SORTEIA primeira playlist a cada atualização
+  const todas = Object.keys(PLAYLISTS);
+  if (todas.length) {
+    const sorteada = todas[Math.floor(Math.random() * todas.length)];
+    currentPl = sorteada;
+    pickTrigger.textContent = `Playlist - ${sorteada}`;
     loadPl();
   }
 })();
