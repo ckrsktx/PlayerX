@@ -7,7 +7,6 @@ let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CH
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // NÃO ativa SW aqui
 })();
 
 async function loadPlaylistsMeta() {
@@ -42,7 +41,7 @@ async function loadTrack() {
   let img = '';
   try {
     const dz = await fetch(`https://api.deezer.com/search/track?q=${encodeURIComponent(t.artist + ' ' + t.title)}&limit=1`).then(r => r.json());
-    img = dz.data?.[0]?.album?.cover_small?.replace('56x56', '350x350') || '';
+    img = dz.data?.[0]?.album?.cover_small?.replace('56x56', '150x150') || '';
   } catch {}
   if (!img) {
     try {
@@ -77,7 +76,19 @@ function updateIcon() {
 
 prev.onclick = () => skip(-1);
 next.onclick = () => skip(1);
-shufBtn.onclick = () => { shuf = !shuf; shufBtn.classList.toggle('on', shuf); loadPl(); };
+shufBtn.onclick = () => {
+  shuf = !shuf;
+  shufBtn.classList.toggle('on', shuf);
+  // fundo branco / texto preto quando ativo
+  if (shuf) {
+    shufBtn.style.background = '#fff';
+    shufBtn.style.color = '#000';
+  } else {
+    shufBtn.style.background = '';
+    shufBtn.style.color = '';
+  }
+  loadPl();
+};
 function skip(d) { idx = (idx + d + q.length) % q.length; loadTrack(); play(); }
 
 function centerTrack() { const li = roleta.children[idx]; if (li) li.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
@@ -107,7 +118,7 @@ function buildPickBox() {
       document.querySelectorAll('.bubble').forEach(x => x.classList.remove('on'));
       b.classList.add('on');
       currentPl = pl;
-      installSW();               // ← ativa SW só agora
+      installSW();
       loadPl();
       pickBox.classList.remove('on');
     };
@@ -183,6 +194,8 @@ $('#atualizar').onclick = async () => {
     q = await res.json();
     played = []; idx = 0;
     shuf = false; shufBtn.classList.remove('on');
+    shufBtn.style.background = '';
+    shufBtn.style.color = '';
     renderPartial(); loadTrack(); updateIcon();
   } catch (e) {
     alert('Erro ao buscar nova versão.');
