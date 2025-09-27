@@ -1,4 +1,4 @@
-const CACHE = 'retro-v1';
+const CACHE = 'retro-v4';
 const ESSENCIAL = ['./', './index.html', './app.css', './app.js', './manifest.json'];
 
 // Limpa lixo de SW antigo ao ativar
