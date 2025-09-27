@@ -4,14 +4,14 @@ const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, swInstalled = false;
 
-// Limpa cache antigo AO ABRIR
-if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
-}
-
+// >>> NÃO ativa SW no carregamento inicial <<<
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
+  // mostra só capa e botão
+  bar.classList.add('disabled');
+  tit.textContent = '–'; art.textContent = '–';
+  a.src = '';
 })();
 
 async function loadPlaylistsMeta() {
@@ -151,13 +151,15 @@ function installSW() {
   navigator.serviceWorker.register('sw.js').then(() => swInstalled = true);
 }
 
+// ===== TROCA DE PLAYLIST: LIMPA TUDO + LOADING =====
 async function loadPl() {
-  // Limpa tudo antes de trocar
+  // Limpa lista antiga
   q = []; rendered = 0; played = []; idx = 0;
   roleta.innerHTML = '';
   tit.textContent = '–'; art.textContent = '–';
   a.src = '';
 
+  // Busca NOVA playlist (com cache-bust)
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
     const res = await fetch(busted);
