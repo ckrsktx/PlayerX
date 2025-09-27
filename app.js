@@ -4,14 +4,12 @@ const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, swInstalled = false;
 
-// >>> NÃO ativa SW no carregamento inicial <<<
+// >>> Primeira tela: só capa e botão <<<
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // mostra só capa e botão
   bar.classList.add('disabled');
-  tit.textContent = '–'; art.textContent = '–';
-  a.src = '';
+  tit.textContent = '–'; art.textContent = '–'; a.src = '';
 })();
 
 async function loadPlaylistsMeta() {
@@ -151,15 +149,12 @@ function installSW() {
   navigator.serviceWorker.register('sw.js').then(() => swInstalled = true);
 }
 
-// ===== TROCA DE PLAYLIST: LIMPA TUDO + LOADING =====
+// ===== TROCA DE PLAYLIST: LIMPA TUDO + RESET SHUFFLE VISUAL =====
 async function loadPl() {
-  // Limpa lista antiga
   q = []; rendered = 0; played = []; idx = 0;
   roleta.innerHTML = '';
-  tit.textContent = '–'; art.textContent = '–';
-  a.src = '';
+  tit.textContent = '–'; art.textContent = '–'; a.src = '';
 
-  // Busca NOVA playlist (com cache-bust)
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
     const res = await fetch(busted);
@@ -177,6 +172,12 @@ async function loadPl() {
   updateIcon();
   pickTrigger.textContent = `Playlist - ${currentPl}`;
   bar.classList.remove('disabled');
+
+  // Reseta visual do shuffle
+  shufBtn.classList.remove('on');
+  shufBtn.style.background = '';
+  shufBtn.style.color = '';
+  shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
 }
 
 function renderPartial(qtd = 50) {
@@ -218,6 +219,7 @@ $('#atualizar').onclick = async () => {
     shuf = false; shufBtn.classList.remove('on');
     shufBtn.style.background = '';
     shufBtn.style.color = '';
+    shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
     renderPartial(); loadTrack(); updateIcon();
   } catch (e) {
     alert('Erro ao buscar nova versão.');
