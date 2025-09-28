@@ -2,7 +2,7 @@ const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/ref
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
-let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
+let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, keepAliveInterval = null;
 
 // Remove SW e limpa cache (evita "página inexistente")
 if ('serviceWorker' in navigator) {
@@ -13,7 +13,6 @@ if ('serviceWorker' in navigator) {
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // SORTEIA primeira playlist a cada atualização
   const todas = Object.keys(PLAYLISTS);
   if (todas.length) {
     const sorteada = todas[Math.floor(Math.random() * todas.length)];
@@ -154,9 +153,8 @@ function shufflePool() {
   return pick;
 }
 
-// ===== TROCA DE PLAYLIST (SEM MISTURA) =====
+// ===== CARREGA PLAYLIST (ORDEM ORIGINAL) =====
 async function loadPl() {
-  // Limpa tudo antes de trocar
   q = []; rendered = 0; played = []; idx = 0;
   roleta.innerHTML = '';
   tit.textContent = '–'; art.textContent = '–';
@@ -207,6 +205,24 @@ a.onended = () => {
   else idx = (idx + 1) % q.length;
   loadTrack(); play();
 };
+
+// ===== KEEP-ALIVE: 25 segundos (dentro do limite) =====
+function startKeepAlive() {
+  if (keepAliveInterval) clearInterval(keepAliveInterval);
+  keepAliveInterval = setInterval(() => {
+    if (!a.paused) {
+      // Toca 1 segundo de silêncio (não quebra reprodução)
+      const silence = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+      silence.volume = 0;
+      silence.play().catch(() => {});
+      // Troca faixa 5 segundos antes do corte (evita parada)
+      if (a.currentTime > a.duration - 5) a.dispatchEvent(new Event('ended'));
+    }
+  }, 25000); // 25 segundos
+}
+
+a.addEventListener('play', startKeepAlive);
+a.addEventListener('pause', () => clearInterval(keepAliveInterval));
 
 $('#atualizar').onclick = async () => {
   await loadPlaylistsMeta();
