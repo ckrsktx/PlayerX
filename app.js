@@ -1,8 +1,14 @@
 const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/refs/heads/main/playlists.json';
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
-const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickContent'), bar = $('#bar');
+const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
+
+// Limpa cache antigo (evita erro ao atualizar)
+if ('serviceWorker' in navigator) {
+  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
+  navigator.serviceWorker.register('sw.js');
+}
 
 (async () => {
   await loadPlaylistsMeta();
@@ -165,7 +171,6 @@ async function loadPl() {
   a.pause();
   updateIcon();
   pickTrigger.textContent = `Playlist - ${currentPl}`;
-  bar.classList.remove('disabled');
 }
 
 function renderPartial(qtd = 50) {
