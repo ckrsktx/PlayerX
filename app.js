@@ -4,10 +4,10 @@ const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
 
-// Limpa cache antigo (evita erro ao atualizar)
+// Limpa qualquer resquício de SW (evita "página inexistente")
 if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
   caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
-  navigator.serviceWorker.register('sw.js');
 }
 
 (async () => {
@@ -115,7 +115,8 @@ function markOnly() {
 function updateSession() {
   const t = q[idx];
   if (!t) return;
-  navigator.mediaSession.metadata = new MediaMetadata({
+  // Comandos de mídia (tela apagada) – funciona SEM SW
+  navigator.mediaSession.metadata = new MediaSession({
     title: t.title,
     artist: t.artist,
     artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/png' }]
@@ -171,6 +172,7 @@ async function loadPl() {
   a.pause();
   updateIcon();
   pickTrigger.textContent = `Playlist - ${currentPl}`;
+  bar.classList.remove('disabled');
 }
 
 function renderPartial(qtd = 50) {
