@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator) {
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // SORTEIA primeira playlist (ordem original)
+  // SORTEIA primeira playlist a cada atualização
   const todas = Object.keys(PLAYLISTS);
   if (todas.length) {
     const sorteada = todas[Math.floor(Math.random() * todas.length)];
@@ -154,8 +154,14 @@ function shufflePool() {
   return pick;
 }
 
-// ===== CARREGA PLAYLIST (ORDEM ORIGINAL) =====
+// ===== TROCA DE PLAYLIST (SEM MISTURA) =====
 async function loadPl() {
+  // Limpa tudo antes de trocar
+  q = []; rendered = 0; played = []; idx = 0;
+  roleta.innerHTML = '';
+  tit.textContent = '–'; art.textContent = '–';
+  a.src = '';
+
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
     const res = await fetch(busted);
@@ -165,7 +171,7 @@ async function loadPl() {
     return;
   }
 
-  // LIMPA tudo antes de aplicar shuffle
+  // LIMPA shuffle antes de aplicar
   played = [];
   idx = shuf ? shufflePool() : 0;
   rendered = 0;
