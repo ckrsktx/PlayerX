@@ -1,4 +1,3 @@
-// SW desativado para cache – só garante reprodução com tela apagada
 const CACHE = 'retro-v1';
 const ESSENCIAL = ['./', './index.html', './app.css', './app.js', './manifest.json'];
 
@@ -12,7 +11,6 @@ self.addEventListener('install', e => {
   self.skipWaiting();
 });
 
-// DEIXA PASSAR: áudios, capas, playlists – não armazena
 self.addEventListener('fetch', e => {
   if (e.request.url.match(/\.(mp3|m4a|ogg|jpg|jpeg|png|json)(\?.*)?$/i)) return;
   if (e.request.mode === 'navigate') {
