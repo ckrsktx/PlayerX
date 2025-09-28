@@ -4,7 +4,7 @@ const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
 
-// Limpa qualquer resquício de SW (evita "página inexistente")
+// Remove SW e limpa cache (evita "página inexistente")
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
   caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator) {
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // SORTEIA primeira playlist a cada atualização
+  // SORTEIA primeira playlist (ordem original)
   const todas = Object.keys(PLAYLISTS);
   if (todas.length) {
     const sorteada = todas[Math.floor(Math.random() * todas.length)];
@@ -115,8 +115,7 @@ function markOnly() {
 function updateSession() {
   const t = q[idx];
   if (!t) return;
-  // Comandos de mídia (tela apagada) – funciona SEM SW
-  navigator.mediaSession.metadata = new MediaSession({
+  navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
     artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/png' }]
@@ -155,7 +154,7 @@ function shufflePool() {
   return pick;
 }
 
-// ===== CARREGA PLAYLIST =====
+// ===== CARREGA PLAYLIST (ORDEM ORIGINAL) =====
 async function loadPl() {
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
@@ -165,7 +164,10 @@ async function loadPl() {
     alert('Erro ao carregar playlist.');
     return;
   }
-  played = []; idx = shuf ? shufflePool() : 0;
+
+  // LIMPA tudo antes de aplicar shuffle
+  played = [];
+  idx = shuf ? shufflePool() : 0;
   rendered = 0;
   renderPartial();
   loadTrack();
