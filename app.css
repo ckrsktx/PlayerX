@@ -2,73 +2,65 @@
 *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; user-select:none }
 html,body{ height:100%; overflow:hidden; background:var(--bg); color:var(--fg); font-family:system-ui; display:flex; flex-direction:column; align-items:center; text-align:center }
 
-/* Distância segura do topo (iPhone com notch) */
+/* Distância SEGURA do topo (notch + barra de status) */
 #top{ flex:0 0 auto; height:env(safe-area-inset-top) }
 
-/* Wrapper principal: capa + player + playlist + bottom fixo */
+/* Container principal – NÃO empurra bottom */
 #wrap{
   flex:1;
   width:100%;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:space-between; /* bottom fixo */
-  padding:0 1rem env(safe-area-inset-bottom); /* bottom seguro */
+  justify-content:flex-start; /* mantém distância original do bottom */
+  padding:
+    calc(env(safe-area-inset-top) + 1rem)   /* topo seguro */
+    1rem
+    calc(env(safe-area-inset-bottom) + 1rem); /* bottom seguro */
 }
 
-/* CAPA: responsiva, não corta topo, não empurra bottom */
+/* Capa: proporção fixa, NÃO corta */
 #capaWrap{
-  margin-top:env(safe-area-inset-top); /* distância do notch */
-  width:min(45vw, 12rem); /* cresce em desktop, limite 12rem */
+  position:relative;
+  width:min(45vw, 12rem);        /* até 12 rem no desktop */
   aspect-ratio:1;
   overflow:hidden;
+  margin-bottom:1rem;            /* mesma distância de antes */
   display:flex;
   align-items:center;
   justify-content:center;
 }
-#capa{ max-width:100%; max-height:100%; width:auto; height:auto }
+#capa{
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+}
 
-/* PLAYER: compacto, não empurra bottom */
-#bar{ display:flex; gap:.8rem; margin:.8rem 0; align-items:center }
+/* Demais estilos (sem alterações visuais) */
+#disco{ position:absolute; inset:0; background:#111; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .3s }
+#disco svg{ width:50%; height:50%; stroke:#444; stroke-width:1; fill:none }
+#bar{ display:flex; gap:.8rem; margin-bottom:.8rem; align-items:center }
 #bar.disabled{ opacity:.35; pointer-events:none }
 .btn{ width:2.4rem; height:2.4rem; background:rgba(255,255,255,.08); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer }
 .btn svg{ width:1.1rem; height:1.1rem; stroke:var(--fg); stroke-width:1.5; fill:none }
 .btn.on{ background:var(--accent); color:var(--bg) }
-
-/* INFO: compacta */
-#info{ margin:.6rem 0; max-width:90vw; text-align:center }
-#tit{ font-size:clamp(1rem, 2.5vw, 1.4rem); font-weight:600; letter-spacing:.5px; margin-bottom:.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
-#art{ opacity:.7; font-size:clamp(.8rem, 2vw, 1rem); font-style:italic }
-
-/* BOLHAS: responsivas */
-#bubbles{ display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; margin:.6rem 0; max-width:90vw }
-.bubble{ padding:.25rem .6rem; border:1px solid var(--accent); border-radius:2rem; font-size:clamp(.6rem, 1.8vw, .8rem); cursor:pointer; transition:background .2s; white-space:nowrap; color:var(--accent); background:transparent }
+#info{ margin-bottom:.6rem; max-width:90vw }
+#tit{ font-size:1.1rem; font-weight:600; letter-spacing:.5px; margin-bottom:.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+#art{ opacity:.7; font-size:.85rem; font-style:italic }
+#bubbles{ display:flex; gap:.4rem; flex-wrap:wrap; justify-content:center; margin-bottom:1rem; max-width:90vw }
+.bubble{ padding:.25rem .6rem; border:1px solid var(--accent); border-radius:2rem; font-size:.7rem; cursor:pointer; transition:background .2s; white-space:nowrap; color:var(--accent); background:transparent }
 .bubble:hover{background:var(--accent); color:var(--bg)}
 .bubble.on{ background:var(--accent); color:var(--bg) }
-
-/* PLAYLIST: altura responsiva, não empurra bottom */
-#roleta{
-  width:100%;
-  max-height:min(35vh, 18rem); /* cresce em desktop, limite 18rem */
-  overflow:auto;
-  list-style:none;
-  scrollbar-width:none;
-  margin:0 0 .8rem 0; /* não empurra bottom */
-}
+#roleta{ width:100%; max-height:35vh; overflow:auto; list-style:none; scrollbar-width:none }
 #roleta::-webkit-scrollbar{ display:none }
 li{ display:flex; flex-direction:column; padding:.3rem 0; cursor:pointer; gap:.1rem; background:rgba(255,255,255,.03); border-radius:.25rem; margin-bottom:.15rem }
 li.on{ color:#ff00ff !important; font-weight:600 }
-li .art{ color:#888; font-size:clamp(.65rem, 1.6vw, .8rem); font-style:italic }
-
-/* BOTTOM FIXO: não mexe com conteúdo */
-#btnWrap{ width:100%; display:flex; justify-content:center; padding:.4rem 0 env(safe-area-inset-bottom); /* bottom seguro */ }
-#atualizar{ padding:clamp(.4rem, 1.5vw, .6rem) clamp(.8rem, 2.5vw, 1.2rem); border:1px solid var(--accent); background:transparent; color:var(--accent); border-radius:2rem; font-size:clamp(.6rem, 1.8vw, .8rem); cursor:pointer }
-
-/* RODAPÉ: fixo, não empurra */
-footer{ width:100%; padding:.4rem 0; font-size:clamp(.45rem, 1.4vw, .55rem); opacity:.4; letter-spacing:1px; position:sticky; bottom:0; background:var(--bg) }
-
-/* CAIXA DE ESCOLHA: centralizada, não corta */
+li .art{ color:#888; font-size:.75rem; font-style:italic }
+footer{ width:100%; padding:.4rem 0; font-size:.55rem; opacity:.4; letter-spacing:1px }
 #pickBox{ position:fixed; inset:0; background:rgba(0,0,0,.7); display:none; align-items:center; justify-content:center; z-index:10 }
 #pickBox.on{ display:flex }
-#pickContent{ background:#111; border:1px solid var(--accent); border-radius:1rem; padding:1rem; max-width:90vw; max-height:min(70vh, 25rem); overflow:auto; display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center }
+#pickContent{ background:#111; border:1px solid var(--accent); border-radius:1rem; padding:1rem; max-width:90vw; max-height:70vh; overflow:auto; display:flex; flex-wrap:wrap; gap:.4rem; justify-content:center }
 #pickContent .bubble{ margin:0 }
+#btnWrap{ width:100%; display:flex; justify-content:center; padding:.8rem 0 1.2rem }
+#atualizar{ padding:.5rem 1rem; border:1px solid var(--accent); background:transparent; color:var(--accent); border-radius:2rem; font-size:.8rem; cursor:pointer }
