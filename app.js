@@ -1,10 +1,10 @@
-const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/refs/heads/main/playlists.json';
+const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsaktx/RetroPlayer/refs/heads/main/playlists.json';
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
-let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, keepAliveInterval = null;
+let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50;
 
-// Remove SW e limpa cache (evita "página inexistente")
+// Remove SW e limpa cache
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
   caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
@@ -30,20 +30,12 @@ async function loadPlaylistsMeta() {
 function setAccent(color) {
   document.documentElement.style.setProperty('--accent', color);
 }
-function getPalette(img) {
-  const cv = document.createElement('canvas'), ctx = cv.getContext('2d');
-  cv.width = img.naturalWidth; cv.height = img.naturalHeight;
-  ctx.drawImage(img, 0, 0);
-  const d = ctx.getImageData(0, 0, cv.width, cv.height).data, rgb = [0, 0, 0], n = d.length / 4;
-  for (let i = 0; i < d.length; i += 4) { rgb[0] += d[i]; rgb[1] += d[i + 1]; rgb[2] += d[i + 2]; }
-  rgb.forEach((v, i) => rgb[i] = Math.round(v / n));
-  return `rgb(${rgb.join(',')})`;
-}
+
 function fitText(el, max = 28) {
   el.style.fontSize = el.textContent.length > max ? '.95rem' : '1.1rem';
 }
 
-// Música e capa só carregam quando EXECUTADA
+// Carrega apenas dados básicos da música
 async function loadTrack() {
   const t = q[idx];
   a.src = t.url;
@@ -52,36 +44,49 @@ async function loadTrack() {
   document.title = `${t.title} – ${t.artist} | Retro Player`;
   fitText(tit);
 
-  let img = '';
-  try {
-    const dz = await fetch(`https://api.deezer.com/search/track?q=${encodeURIComponent(t.artist + ' ' + t.title)}&limit=1`).then(r => r.json());
-    img = dz.data?.[0]?.album?.cover_small?.replace('56x56', '150x150') || '';
-  } catch {}
-  if (!img) {
-    try {
-      const it = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(t.artist + ' ' + t.title)}&limit=1&entity=song`).then(r => r.json());
-      img = it.results?.[0]?.artworkUrl100?.replace('100x100', '600x600') || '';
-    } catch {}
-  }
+  // Carrega capa apenas quando necessário (placeholder inicial)
+  capa.src = 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png';
+  disco.style.opacity = 0;
+  setAccent('#00ffff');
 
-  if (img) {
-    capa.src = img;
-    disco.style.opacity = 0;
-    capa.onload = () => requestIdleCallback(() => setAccent(getPalette(capa)));
-  } else {
-    capa.src = 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png';
-    disco.style.opacity = 0;
-    setAccent('#00ffff');
-  }
+  centerTrack(); 
+  markOnly(); 
+  updateSession();
 
-  centerTrack(); markOnly(); updateSession();
+  // Carrega capa em background sem bloquear a interface
+  loadCoverAsync(t);
 }
 
-function play() { a.play(); }
+// Carrega capa de forma assíncrona
+async function loadCoverAsync(track) {
+  try {
+    const dz = await fetch(`https://api.deezer.com/search/track?q=${encodeURIComponent(track.artist + ' ' + track.title)}&limit=1`);
+    const data = await dz.json();
+    const img = data.data?.[0]?.album?.cover_small?.replace('56x56', '150x150');
+    
+    if (img) {
+      capa.src = img;
+      // Remove análise de cor para melhorar performance
+    }
+  } catch (e) {
+    // Falha silenciosa - fallback para iTunes
+    try {
+      const it = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(track.artist + ' ' + track.title)}&limit=1&entity=song`);
+      const itData = await it.json();
+      const itImg = itData.results?.[0]?.artworkUrl100?.replace('100x100', '600x600');
+      if (itImg) capa.src = itImg;
+    } catch (e2) {
+      // Mantém placeholder padrão
+    }
+  }
+}
+
+function play() { a.play().catch(() => {}); }
 function pause() { a.pause(); }
 function togglePlay() { a.paused ? play() : pause(); }
 playBtn.onclick = togglePlay;
 a.onplay = a.onpause = updateIcon;
+
 function updateIcon() {
   playBtn.innerHTML = a.paused
     ? '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
@@ -90,23 +95,27 @@ function updateIcon() {
 
 prev.onclick = () => skip(-1);
 next.onclick = () => skip(1);
+
 shufBtn.onclick = () => {
   shuf = !shuf;
   shufBtn.classList.toggle('on', shuf);
-  if (shuf) {
-    shufBtn.style.background = '#fff';
-    shufBtn.style.color = '#000';
-    shufBtn.querySelector('svg').style.stroke = '#000';
-  } else {
-    shufBtn.style.background = '';
-    shufBtn.style.color = '';
-    shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
-  }
+  shufBtn.style.background = shuf ? '#fff' : '';
+  shufBtn.style.color = shuf ? '#000' : '';
+  shufBtn.querySelector('svg').style.stroke = shuf ? '#000' : 'var(--fg)';
   loadPl();
 };
-function skip(d) { idx = (idx + d + q.length) % q.length; loadTrack(); play(); }
 
-function centerTrack() { const li = roleta.children[idx]; if (li) li.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+function skip(d) { 
+  idx = (idx + d + q.length) % q.length; 
+  loadTrack(); 
+  play(); 
+}
+
+function centerTrack() { 
+  const li = roleta.children[idx]; 
+  if (li) li.scrollIntoView({ block: 'center', behavior: 'smooth' }); 
+}
+
 function markOnly() {
   document.querySelectorAll('li').forEach((li, i) => li.classList.toggle('on', i === idx));
 }
@@ -114,11 +123,13 @@ function markOnly() {
 function updateSession() {
   const t = q[idx];
   if (!t) return;
+  
   navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
-    artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/png' }]
+    artwork: [{ src: capa.src, sizes: '512x512', type: 'image/png' }]
   });
+  
   navigator.mediaSession.setActionHandler('play', play);
   navigator.mediaSession.setActionHandler('pause', pause);
   navigator.mediaSession.setActionHandler('previoustrack', () => skip(-1));
@@ -142,8 +153,15 @@ function buildPickBox() {
     pickContent.append(b);
   });
 }
-pickTrigger.onclick = () => { buildPickBox(); pickBox.classList.add('on'); };
-pickBox.onclick = (e) => { if (e.target === pickBox) pickBox.classList.remove('on'); };
+
+pickTrigger.onclick = () => { 
+  buildPickBox(); 
+  pickBox.classList.add('on'); 
+};
+
+pickBox.onclick = (e) => { 
+  if (e.target === pickBox) pickBox.classList.remove('on'); 
+};
 
 function shufflePool() {
   const pool = q.map((_, i) => i).filter(i => !played.includes(i));
@@ -153,11 +171,15 @@ function shufflePool() {
   return pick;
 }
 
-// ===== CARREGA PLAYLIST (ORDEM ORIGINAL) =====
+// Carrega playlist com lazy loading otimizado
 async function loadPl() {
-  q = []; rendered = 0; played = []; idx = 0;
+  q = []; 
+  rendered = 0; 
+  played = []; 
+  idx = 0;
   roleta.innerHTML = '';
-  tit.textContent = '–'; art.textContent = '–';
+  tit.textContent = '–'; 
+  art.textContent = '–';
   a.src = '';
 
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
@@ -169,7 +191,6 @@ async function loadPl() {
     return;
   }
 
-  // LIMPA shuffle antes de aplicar
   played = [];
   idx = shuf ? shufflePool() : 0;
   rendered = 0;
@@ -181,65 +202,74 @@ async function loadPl() {
   bar.classList.remove('disabled');
 }
 
-function renderPartial(qtd = 50) {
+// Renderização lazy mais eficiente
+function renderPartial(qtd = 30) {
   const frag = document.createDocumentFragment();
   const end = Math.min(rendered + qtd, q.length);
+  
   for (let i = rendered; i < end; i++) {
     const t = q[i];
     const li = document.createElement('li');
     li.innerHTML = `<span class="mus">${t.title}</span><span class="art">${t.artist}</span>`;
-    li.onclick = () => { idx = i; loadTrack(); play(); };
+    li.onclick = () => { 
+      idx = i; 
+      loadTrack(); 
+      play(); 
+    };
     frag.append(li);
   }
+  
   rendered = end;
   roleta.append(frag);
   markOnly();
-  roleta.onscroll = () => {
-    if (rendered >= q.length) return;
-    if (roleta.scrollTop + roleta.clientHeight >= roleta.scrollHeight - 40) renderPartial(50);
-  };
 }
+
+// Scroll throttling para melhor performance
+let scrollTimeout;
+roleta.onscroll = () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    if (rendered >= q.length) return;
+    if (roleta.scrollTop + roleta.clientHeight >= roleta.scrollHeight - 100) {
+      renderPartial(30);
+    }
+  }, 50);
+};
 
 a.onended = () => {
   if (shuf) idx = shufflePool();
   else idx = (idx + 1) % q.length;
-  loadTrack(); play();
+  loadTrack(); 
+  play();
 };
 
-// ===== KEEP-ALIVE: 25 segundos (dentro do limite) =====
+// Keep-alive simplificado
 function startKeepAlive() {
-  if (keepAliveInterval) clearInterval(keepAliveInterval);
-  keepAliveInterval = setInterval(() => {
-    if (!a.paused) {
-      // Toca 1 segundo de silêncio (não quebra reprodução)
-      const silence = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
-      silence.volume = 0;
-      silence.play().catch(() => {});
-      // Troca faixa 5 segundos antes do corte (evita parada)
-      if (a.currentTime > a.duration - 5) a.dispatchEvent(new Event('ended'));
+  setInterval(() => {
+    if (!a.paused && a.currentTime > a.duration - 5) {
+      a.dispatchEvent(new Event('ended'));
     }
-  }, 25000); // 25 segundos
+  }, 10000);
 }
 
 a.addEventListener('play', startKeepAlive);
-a.addEventListener('pause', () => clearInterval(keepAliveInterval));
 
 $('#atualizar').onclick = async () => {
   await loadPlaylistsMeta();
-  if (navigator.serviceWorker.controller) {
-    await caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
-    navigator.serviceWorker.controller.postMessage({ cmd: 'SKIP_WAITING' });
-  }
   const busted = PLAYLISTS[currentPl] + '?t=' + Date.now();
   try {
     const res = await fetch(busted);
     q = await res.json();
-    played = []; idx = 0;
-    shuf = false; shufBtn.classList.remove('on');
+    played = []; 
+    idx = 0;
+    shuf = false; 
+    shufBtn.classList.remove('on');
     shufBtn.style.background = '';
     shufBtn.style.color = '';
     shufBtn.querySelector('svg').style.stroke = 'var(--fg)';
-    renderPartial(); loadTrack(); updateIcon();
+    renderPartial(); 
+    loadTrack(); 
+    updateIcon();
   } catch (e) {
     alert('Erro ao buscar nova versão.');
   }
