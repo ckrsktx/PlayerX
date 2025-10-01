@@ -2,7 +2,7 @@ const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/ref
 let PLAYLISTS = {};
 const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
-let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, keepAliveInterval = null;
+let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, keepAlive;
 
 // Remove SW e limpa cache (evita "página inexistente")
 if ('serviceWorker' in navigator) {
@@ -153,34 +153,7 @@ function shufflePool() {
   return pick;
 }
 
-function updateSession() {
-  const t = q[idx];
-  if (!t) return;
-
-  // Notificação nativa (funciona minimizado)
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification(`${t.title}`, {
-      body: `${t.artist}`,
-      icon: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png',
-      silent: true,
-      tag: 'nowplaying', // sobrescreve a anterior
-    });
-  }
-
-  // MediaSession (lock-screen, fone, relógio)
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title: t.title,
-    artist: t.artist,
-    artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/png' }]
-  });
-  navigator.mediaSession.setActionHandler('play', play);
-  navigator.mediaSession.setActionHandler('pause', pause);
-  navigator.mediaSession.setActionHandler('previoustrack', () => skip(-1));
-  navigator.mediaSession.setActionHandler('nexttrack', () => skip(1));
-}
-
-
-// ===== CARREGA PLAYLIST (ORDEM ORIGINAL) =====
+// ===== TROCA DE PLAYLIST (SEM MISTURA) =====
 async function loadPl() {
   q = []; rendered = 0; played = []; idx = 0;
   roleta.innerHTML = '';
@@ -227,35 +200,30 @@ function renderPartial(qtd = 50) {
   };
 }
 
+// ===== ANTI-SUSPENSÃO (tela apagada) =====
+a.addEventListener('play', () => {
+  keepAlive = setInterval(() => {
+    // "ping" leve no áudio (não interrompe)
+    if (!a.paused) a.currentTime = a.currentTime;
+  }, 30000); // a cada 30 s
+});
+a.addEventListener('pause', () => clearInterval(keepAlive));
+
+// Próxima faixa ANTES de acabar (evita pausa)
+a.addEventListener('timeupdate', () => {
+  if (a.currentTime > a.duration - 1) {
+    if (shuf) idx = shufflePool();
+    else idx = (idx + 1) % q.length;
+    loadTrack();
+    a.play();
+  }
+});
+
 a.onended = () => {
   if (shuf) idx = shufflePool();
   else idx = (idx + 1) % q.length;
   loadTrack(); play();
 };
-
-// Solicita permissão para notificações (apenas 1 vez)
-if ('Notification' in window && Notification.permission === 'default') {
-  Notification.requestPermission();
-}
-
-
-// ===== KEEP-ALIVE: 25 segundos (dentro do limite) =====
-function startKeepAlive() {
-  if (keepAliveInterval) clearInterval(keepAliveInterval);
-  keepAliveInterval = setInterval(() => {
-    if (!a.paused) {
-      // Toca 1 segundo de silêncio (não quebra reprodução)
-      const silence = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
-      silence.volume = 0;
-      silence.play().catch(() => {});
-      // Troca faixa 5 segundos antes do corte (evita parada)
-      if (a.currentTime > a.duration - 5) a.dispatchEvent(new Event('ended'));
-    }
-  }, 25000); // 25 segundos
-}
-
-a.addEventListener('play', startKeepAlive);
-a.addEventListener('pause', () => clearInterval(keepAliveInterval));
 
 $('#atualizar').onclick = async () => {
   await loadPlaylistsMeta();
