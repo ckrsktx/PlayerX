@@ -4,20 +4,15 @@ const $ = s => document.querySelector(s);
 const a = $('#a'), capa = $('#capa'), disco = $('#disco'), tit = $('#tit'), art = $('#art'), playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn'), roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent'), bar = $('#bar');
 let q = [], idx = 0, shuf = false, currentPl = '', played = [], rendered = 0, CHUNK = 50, keepAliveInterval = null;
 
-// Remove SW e limpa cache (evita “página inexistente”)
+// Remove SW e limpa cache (evita "página inexistente")
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k)))));
+  caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
 }
 
 (async () => {
   await loadPlaylistsMeta();
   buildPickBox();
-  // Notificação nativa (pede permissão 1x)
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-  }
-  // Sorteia primeira playlist
   const todas = Object.keys(PLAYLISTS);
   if (todas.length) {
     const sorteada = todas[Math.floor(Math.random() * todas.length)];
@@ -116,22 +111,9 @@ function markOnly() {
   document.querySelectorAll('li').forEach((li, i) => li.classList.toggle('on', i === idx));
 }
 
-// ===== NOTIFICAÇÃO NATIVA (funciona minimizado) =====
 function updateSession() {
   const t = q[idx];
   if (!t) return;
-
-  // Notificação nativa do sistema (APK/WebView)
-  if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification(`${t.title}`, {
-      body: `${t.artist}`,
-      icon: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png',
-      silent: true,
-      tag: 'nowplaying' // sobrescreve anterior
-    });
-  }
-
-  // MediaSession (lock-screen, fones, relógio)
   navigator.mediaSession.metadata = new MediaMetadata({
     title: t.title,
     artist: t.artist,
@@ -171,23 +153,32 @@ function shufflePool() {
   return pick;
 }
 
-// ===== KEEP-ALIVE: 25 s + troca 20 s antes do fim =====
-function startKeepAlive() {
-  if (keepAliveInterval) clearInterval(keepAliveInterval);
-  keepAliveInterval = setInterval(() => {
-    if (!a.paused) {
-      // Silêncio de 1 s (dentro do limite)
-      const silence = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
-      silence.volume = 0;
-      silence.play().catch(() => {});
-      // Troca faixa 20 s antes do fim (evita corte)
-      if (a.currentTime > a.duration - 20) a.dispatchEvent(new Event('ended'));
-    }
-  }, 25000); // 25 segundos
+function updateSession() {
+  const t = q[idx];
+  if (!t) return;
+
+  // Notificação nativa (funciona minimizado)
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification(`${t.title}`, {
+      body: `${t.artist}`,
+      icon: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png',
+      silent: true,
+      tag: 'nowplaying', // sobrescreve a anterior
+    });
+  }
+
+  // MediaSession (lock-screen, fone, relógio)
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: t.title,
+    artist: t.artist,
+    artwork: [{ src: capa.src || 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png', sizes: '512x512', type: 'image/png' }]
+  });
+  navigator.mediaSession.setActionHandler('play', play);
+  navigator.mediaSession.setActionHandler('pause', pause);
+  navigator.mediaSession.setActionHandler('previoustrack', () => skip(-1));
+  navigator.mediaSession.setActionHandler('nexttrack', () => skip(1));
 }
 
-a.addEventListener('play', startKeepAlive);
-a.addEventListener('pause', () => clearInterval(keepAliveInterval));
 
 // ===== CARREGA PLAYLIST (ORDEM ORIGINAL) =====
 async function loadPl() {
@@ -205,6 +196,7 @@ async function loadPl() {
     return;
   }
 
+  // LIMPA shuffle antes de aplicar
   played = [];
   idx = shuf ? shufflePool() : 0;
   rendered = 0;
@@ -240,6 +232,30 @@ a.onended = () => {
   else idx = (idx + 1) % q.length;
   loadTrack(); play();
 };
+
+// Solicita permissão para notificações (apenas 1 vez)
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+
+// ===== KEEP-ALIVE: 25 segundos (dentro do limite) =====
+function startKeepAlive() {
+  if (keepAliveInterval) clearInterval(keepAliveInterval);
+  keepAliveInterval = setInterval(() => {
+    if (!a.paused) {
+      // Toca 1 segundo de silêncio (não quebra reprodução)
+      const silence = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+      silence.volume = 0;
+      silence.play().catch(() => {});
+      // Troca faixa 5 segundos antes do corte (evita parada)
+      if (a.currentTime > a.duration - 5) a.dispatchEvent(new Event('ended'));
+    }
+  }, 25000); // 25 segundos
+}
+
+a.addEventListener('play', startKeepAlive);
+a.addEventListener('pause', () => clearInterval(keepAliveInterval));
 
 $('#atualizar').onclick = async () => {
   await loadPlaylistsMeta();
