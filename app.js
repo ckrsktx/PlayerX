@@ -61,4 +61,3 @@ const busted = PLAYLISTS[currentPl] + '?t=' + Date.now(); try { const res = awai
 // pequenas utilidades function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&','<':'<','>':'>','"':'"',"'":"'"})[c]); }
 
 // expor algumas funções para debug se necessário window.RetroPlayer = { loadPlaylistsMeta, loadPl, loadTrack };
-
