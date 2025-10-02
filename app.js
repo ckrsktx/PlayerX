@@ -1,27 +1,22 @@
 /********************************************************************
- *  Retro Player  –  versão “zero efeitos / carrega só ao clicar”   *
+ *  Retro Player  –  versão “zero efeitos / leve / funcional”       *
  ********************************************************************/
 
 const PLAYLIST_META = 'https://raw.githubusercontent.com/ckrsktx/RetroPlayer/refs/heads/main/playlists.json';
-let PLAYLISTS = {};          // mapa nome → url
-let q      = [];             // fila atual
-let idx    = 0;              // índice da faixa
-let shuf   = false;          // aleatório ligado?
-let currentPl = '';          // nome da playlist ativa
-let rendered = 0;            // quantas <li> já renderizadas
-const CHUNK = 50;            // renderização sob-demanda
+let PLAYLISTS = {};
+let q = [], idx = 0, shuf = false, currentPl = '', rendered = 0;
+const CHUNK = 50;
 
-// atalhos DOM
 const $ = s => document.querySelector(s);
-const a   = $('#a');
+const a = $('#a');
 const tit = $('#tit'), art = $('#art'), capa = $('#capa');
 const playBtn = $('#playBtn'), prev = $('#prev'), next = $('#next'), shufBtn = $('#shufBtn');
 const roleta = $('#roleta'), pickTrigger = $('#pickTrigger'), pickBox = $('#pickBox'), pickContent = $('#pickContent');
 
-/* ---------- inicialização ---------- */
+/* ---------- init ---------- */
 (async () => {
-  await fetchPlaylistMeta();          // só baixa o índice
-  buildPickBox();                     // monta lista de gêneros
+  await fetchPlaylistMeta();
+  buildPickBox();
 })();
 
 async function fetchPlaylistMeta() {
@@ -29,24 +24,26 @@ async function fetchPlaylistMeta() {
   PLAYLISTS = await res.json();
 }
 
-/* ---------- controles básicos ---------- */
+/* ---------- controles ---------- */
 function togglePlay() { a.paused ? a.play() : a.pause(); }
 playBtn.onclick = togglePlay;
-a.onplay = a.onpause = () => {
+a.onplay = a.onpause = updatePlayIcon;
+
+function updatePlayIcon() {
   playBtn.innerHTML = a.paused
-    ? '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
-    : '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-};
+    ? '▶'
+    : '❚❚';
+}
 prev.onclick = () => { idx = (idx - 1 + q.length) % q.length; loadAndPlay(); };
 next.onclick = () => { idx = (idx + 1) % q.length; loadAndPlay(); };
 
 shufBtn.onclick = () => {
   shuf = !shuf;
   shufBtn.classList.toggle('on', shuf);
-  loadPl(currentPl);        // recarrega fila respeitando novo modo
+  loadPl(currentPl);
 };
 
-/* ---------- carregamento da faixa ---------- */
+/* ---------- faixa ---------- */
 async function loadTrack() {
   const t = q[idx];
   if (!t) return;
@@ -54,13 +51,12 @@ async function loadTrack() {
   tit.textContent = t.title;
   art.textContent = t.artist;
   document.title = `${t.title} – ${t.artist} | Retro Player`;
-  capa.src = 'https://i.ibb.co/n8LFzxmb/reprodutor-de-musica-2.png'; // capa única
+  capa.src = 'https://i.ibb.co/3WfBk6k/capa-300.png'; // 12 KB, 300×300
   centerTrack(); markOnly();
 }
-
 function loadAndPlay() { loadTrack(); a.play(); }
 
-/* ---------- escolha de playlist ---------- */
+/* ---------- escolha playlist ---------- */
 function buildPickBox() {
   pickContent.innerHTML = '';
   Object.keys(PLAYLISTS).forEach(pl => {
@@ -74,7 +70,7 @@ function buildPickBox() {
 pickTrigger.onclick = () => pickBox.classList.add('on');
 pickBox.onclick = e => { if (e.target === pickBox) pickBox.classList.remove('on'); };
 
-/* ---------- carrega playlist clicada ---------- */
+/* ---------- carrega playlist ---------- */
 async function loadPl(plName) {
   currentPl = plName;
   pickTrigger.textContent = `Playlist – ${plName}`;
@@ -97,7 +93,7 @@ async function loadPl(plName) {
   a.pause();
 }
 
-/* ---------- renderização sob-demanda ---------- */
+/* ---------- render ---------- */
 function renderPartial(qtd = CHUNK) {
   const frag = document.createDocumentFragment();
   const end = Math.min(rendered + qtd, q.length);
@@ -112,7 +108,6 @@ function renderPartial(qtd = CHUNK) {
   roleta.appendChild(frag);
   markOnly();
 }
-
 roleta.onscroll = () => {
   if (rendered >= q.length) return;
   if (roleta.scrollTop + roleta.clientHeight >= roleta.scrollHeight - 40) renderPartial(CHUNK);
@@ -127,13 +122,8 @@ function markOnly() {
   roleta.querySelectorAll('li').forEach((li, i) => li.classList.toggle('on', i === idx));
 }
 
-/* ---------- salto automático ao fim ---------- */
-a.addEventListener('timeupdate', () => {
-  if (a.currentTime > a.duration - 1) { skip(1); }
-});
-a.onended = () => skip(1);
-
-function skip(dir) {
-  idx = (idx + dir + q.length) % q.length;
+/* ---------- auto próxima ---------- */
+a.onended = () => {
+  idx = (idx + 1) % q.length;
   loadAndPlay();
-}
+};
